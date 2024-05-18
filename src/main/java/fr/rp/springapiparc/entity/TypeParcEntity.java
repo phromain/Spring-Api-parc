@@ -1,11 +1,14 @@
-package entity;
+package fr.rp.springapiparc.entity;
 
+import fr.rp.springapiparc.dto.in.TypeParcInDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "type_parc")
 public class TypeParcEntity {
@@ -16,5 +19,9 @@ public class TypeParcEntity {
 
     @Column(name = "libelle_type_parc", nullable = false, length = 20)
     private String libelleTypeParc;
+
+    public TypeParcEntity(TypeParcInDto typeParcInDto) {
+        this.libelleTypeParc = typeParcInDto.getLibelleTypeParc();
+    }
 
 }

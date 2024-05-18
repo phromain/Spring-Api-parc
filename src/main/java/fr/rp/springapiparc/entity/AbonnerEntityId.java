@@ -1,4 +1,4 @@
-package entity;
+package fr.rp.springapiparc.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.Hibernate;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -13,6 +14,7 @@ import java.util.Objects;
 @Setter
 @Embeddable
 public class AbonnerEntityId implements Serializable {
+    @Serial
     private static final long serialVersionUID = 6250753842449042183L;
     @Column(name = "id_reseau_sociaux", nullable = false)
     private Integer idReseauSociaux;

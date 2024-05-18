@@ -1,4 +1,4 @@
-package entity;
+package fr.rp.springapiparc.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -1,7 +1,11 @@
-package controller.exception;
+package fr.rp.springapiparc.controller.exception;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
+@Getter
+@Setter
 public class ApiError {
 
     private HttpStatus status;
@@ -12,22 +16,5 @@ public class ApiError {
         this.message = message;
     }
 
-    // getters and setters
-
-    public HttpStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(HttpStatus status) {
-        this.status = status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }
 
