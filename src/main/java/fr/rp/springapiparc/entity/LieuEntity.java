@@ -1,5 +1,6 @@
 package fr.rp.springapiparc.entity;
 
+import fr.rp.springapiparc.dto.in.LieuInDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,5 +30,12 @@ public class LieuEntity {
 
     @OneToMany(mappedBy = "idLieu")
     private Set<ParcEntity> parcs = new LinkedHashSet<>();
+
+    public void insertUpdateValues(LieuInDto lieuInDto) {
+        this.ville = lieuInDto.getVille();
+        this.codePostal = lieuInDto.getCodePostal();
+    }
+
+
 
 }
