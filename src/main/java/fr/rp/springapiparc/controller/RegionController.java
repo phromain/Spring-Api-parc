@@ -1,8 +1,12 @@
 package fr.rp.springapiparc.controller;
 
+import fr.rp.springapiparc.dto.in.LieuInDto;
 import fr.rp.springapiparc.dto.in.RegionInDto;
+import fr.rp.springapiparc.dto.out.LieuOutDto;
 import fr.rp.springapiparc.dto.out.RegionOutDto;
+import fr.rp.springapiparc.entity.LieuEntity;
 import fr.rp.springapiparc.entity.RegionEntity;
+import fr.rp.springapiparc.repository.LieuRepository;
 import fr.rp.springapiparc.repository.RegionRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +31,9 @@ public class RegionController {
 
     @Autowired
     private RegionRepository regionRepository;
+
+    @Autowired
+    private LieuRepository lieuRepository;
 
 
     @GetMapping("")
@@ -74,6 +82,42 @@ public class RegionController {
             RegionEntity regionEntity = new RegionEntity(regionInDto);
             regionRepository.save(regionEntity);
             return new ResponseEntity<>(regionEntity, HttpStatus.CREATED);
+        } catch (ConstraintViolationException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        } catch (Exception e){
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @PostMapping("/{idRegion}/lieu")
+    @Transactional
+    @Operation(summary = "Crée un lieu par un IDregion", description = "Crée un lieu par un IDregion",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = " Lieu Créer", content = @Content(schema = @Schema(implementation = RegionInDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Erreur indiquer", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "Region non trouvée", content = @Content),
+                    @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
+            }
+    )
+    public ResponseEntity<?> createLieuByIdRegion(@PathVariable Integer idRegion, @Valid @RequestBody LieuInDto lieuInDto) {
+        Optional<RegionEntity> optionalRegionEntity;
+        try {
+            optionalRegionEntity = regionRepository.findById(idRegion);
+            if (!optionalRegionEntity.isPresent()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Région non trouvé");
+            }
+        } catch (DataAccessException e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        try {
+            LieuEntity lieuEntity = new LieuEntity();
+            RegionEntity regionEntity = optionalRegionEntity.get();
+            lieuEntity.insertNewLieu(lieuInDto,regionEntity);
+            lieuRepository.save(lieuEntity);
+            LieuOutDto lieuOutDto = new LieuOutDto(lieuEntity);
+            return new ResponseEntity<>(lieuOutDto, HttpStatus.CREATED);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         } catch (Exception e){

@@ -35,7 +35,11 @@ public class LieuEntity {
         this.ville = lieuInDto.getVille();
         this.codePostal = lieuInDto.getCodePostal();
     }
-
+    public void insertNewLieu(LieuInDto lieuInDto, RegionEntity regionEntity) {
+        this.ville = lieuInDto.getVille();
+        this.codePostal = lieuInDto.getCodePostal();
+        this.idRegion = regionEntity;
+    }
 
 
 }
