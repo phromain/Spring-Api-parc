@@ -115,6 +115,7 @@ public class ParkingController {
     }
 
     @DeleteMapping("/{idParking}")
+    @Transactional
     @Operation(summary = "Supprime un parking", description = "Supprime un parking",
             responses = {
                     @ApiResponse(responseCode = "200", description = " Parking Supprimé", content = @Content),

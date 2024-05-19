@@ -1,7 +1,9 @@
 package fr.rp.springapiparc.entity;
 
+import fr.rp.springapiparc.dto.in.ReseauSociauxInDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.LinkedHashSet;
@@ -9,6 +11,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "reseau_sociaux")
 public class ReseauSociauxEntity {
@@ -22,5 +25,12 @@ public class ReseauSociauxEntity {
 
     @OneToMany(mappedBy = "idReseauSociaux")
     private Set<AbonnerEntity> abonners = new LinkedHashSet<>();
+
+    public ReseauSociauxEntity(ReseauSociauxInDto reseauSociauxInDto) {
+        this.libReseau = reseauSociauxInDto.getLibelleReseau();
+    }
+
+
+
 
 }

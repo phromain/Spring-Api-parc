@@ -91,6 +91,7 @@ public class LieuController {
     }
 
     @DeleteMapping("/{idLieu}")
+    @Transactional
     @Operation(summary = "Supprime un lieu", description = "Supprime un lieu",
             responses = {
                     @ApiResponse(responseCode = "200", description = " Lieu Supprimé", content = @Content),

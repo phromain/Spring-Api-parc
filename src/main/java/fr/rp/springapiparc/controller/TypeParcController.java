@@ -90,7 +90,7 @@ public class TypeParcController {
     @Transactional
     @Operation(summary = "Modifie un type", description = "Modifie un type",
             responses = {
-                    @ApiResponse(responseCode = "200", description = " Type mis à jour",  content = @Content(schema = @Schema(implementation = ParkingInDto.class))),
+                    @ApiResponse(responseCode = "200", description = " Type mis à jour",  content = @Content(schema = @Schema(implementation = TypeParcInDto.class))),
                     @ApiResponse(responseCode = "400", description = "Erreur indiquer ", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Type non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
@@ -98,12 +98,12 @@ public class TypeParcController {
     )
     public ResponseEntity<?> updateTypeParc (@PathVariable Integer idType, @Valid @RequestBody TypeParcInDto typeParcInDto) {
         try {
-            Optional<TypeParcEntity> optionalTypeParc = typeParcRepository.findById(idType);
-            if (optionalTypeParc.isEmpty()){
+            Optional<TypeParcEntity> optionalTypeParcEntity = typeParcRepository.findById(idType);
+            if (optionalTypeParcEntity.isEmpty()){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("Type non trouvé");
             }
-            TypeParcEntity typeParcEntity = optionalTypeParc.get();
+            TypeParcEntity typeParcEntity = optionalTypeParcEntity.get();
             typeParcEntity.setLibelleTypeParc(typeParcInDto.getLibelleTypeParc());
             typeParcRepository.save(typeParcEntity);
             TypeParcOutDto typeParcOutDto = new TypeParcOutDto(typeParcEntity);
@@ -118,6 +118,7 @@ public class TypeParcController {
     }
 
     @DeleteMapping("/{idType}")
+    @Transactional
     @Operation(summary = "Supprime un type", description = "Supprime un type",
             responses = {
                     @ApiResponse(responseCode = "200", description = " Type Supprimé", content = @Content),
