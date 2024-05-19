@@ -14,6 +14,6 @@ public class ReseauSociauxOutDto {
 
     public ReseauSociauxOutDto(ReseauSociauxEntity reseauSociauxEntity) {
         this.id = reseauSociauxEntity.getId();
-        this.libelleReseau = getLibelleReseau();
+        this.libelleReseau = reseauSociauxEntity.getLibReseau();
     }
 }

@@ -1,7 +1,6 @@
 package fr.rp.springapiparc.controller;
 
 
-import fr.rp.springapiparc.dto.in.ParkingInDto;
 import fr.rp.springapiparc.dto.in.TypeParcInDto;
 import fr.rp.springapiparc.dto.out.TypeParcOutDto;
 import fr.rp.springapiparc.entity.TypeParcEntity;
