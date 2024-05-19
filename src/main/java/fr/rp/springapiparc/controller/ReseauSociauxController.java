@@ -23,28 +23,28 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-    @RequestMapping("/reseauSociaux")
-    public class ReseauSociauxController {
+@RequestMapping("/reseauSociaux")
+public class ReseauSociauxController {
 
-        @Autowired
-        private ReseauSociauxRepository reseauSociauxRepository;
+    @Autowired
+    private ReseauSociauxRepository reseauSociauxRepository;
 
 
-        @GetMapping("")
-        @Operation(summary = "Affiche la liste des reseauSociauxs", description = "Retourne une liste des reseauSociauxs",
-                responses = {
-                        @ApiResponse(responseCode = "200", description = " Liste ReseauSociaux")
+    @GetMapping("")
+    @Operation(summary = "Affiche la liste des reseauSociauxs", description = "Retourne une liste des reseauSociauxs",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = " Liste ReseauSociaux")
 
-                })
-        public ResponseEntity<List<ReseauSociauxOutDto>> getListReseauSociaux() {
-            List<ReseauSociauxEntity> listReseauSociauxEntity = reseauSociauxRepository.findAll();
-            List<ReseauSociauxOutDto> listReseauSociauxOutDto = new ArrayList<>();
-            for (ReseauSociauxEntity reseauSociauxEntity : listReseauSociauxEntity) {
-                ReseauSociauxOutDto reseauSociauxOutDto = new ReseauSociauxOutDto(reseauSociauxEntity);
-                listReseauSociauxOutDto.add(reseauSociauxOutDto);
-            }
-            return new ResponseEntity<>(listReseauSociauxOutDto, HttpStatus.OK);
+            })
+    public ResponseEntity<List<ReseauSociauxOutDto>> getListReseauSociaux() {
+        List<ReseauSociauxEntity> listReseauSociauxEntity = reseauSociauxRepository.findAll();
+        List<ReseauSociauxOutDto> listReseauSociauxOutDto = new ArrayList<>();
+        for (ReseauSociauxEntity reseauSociauxEntity : listReseauSociauxEntity) {
+            ReseauSociauxOutDto reseauSociauxOutDto = new ReseauSociauxOutDto(reseauSociauxEntity);
+            listReseauSociauxOutDto.add(reseauSociauxOutDto);
         }
+        return new ResponseEntity<>(listReseauSociauxOutDto, HttpStatus.OK);
+    }
 
 
 

@@ -36,13 +36,13 @@ public class TypeParcController {
                     @ApiResponse(responseCode = "200", description = "Liste TypeParc")
             })
     public ResponseEntity<List<TypeParcOutDto>> getListTypeParc() {
-        List<TypeParcEntity> listTypeParc = typeParcRepository.findAll();
-        List<TypeParcOutDto> listTypeParcDto = new ArrayList<>();
-        for (TypeParcEntity typeParc : listTypeParc) {
+        List<TypeParcEntity> listTypeParcEntity = typeParcRepository.findAll();
+        List<TypeParcOutDto> listTypeParcOutDto = new ArrayList<>();
+        for (TypeParcEntity typeParc : listTypeParcEntity) {
             TypeParcOutDto typeParcOutDto = new TypeParcOutDto(typeParc);
-            listTypeParcDto.add(typeParcOutDto);
+            listTypeParcOutDto.add(typeParcOutDto);
         }
-        return new ResponseEntity<>(listTypeParcDto, HttpStatus.OK);
+        return new ResponseEntity<>(listTypeParcOutDto, HttpStatus.OK);
     }
 
     @GetMapping("/{idType}")
