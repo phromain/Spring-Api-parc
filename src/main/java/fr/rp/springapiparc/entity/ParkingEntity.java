@@ -20,7 +20,7 @@ public class ParkingEntity {
     @Column(name = "id_parking", nullable = false)
     private Integer id;
 
-    @Column(name = "parking", nullable = false, length = 50)
+    @Column(name = "parking", nullable = false, length = 50, unique = true)
     private String parking;
 
     @OneToMany(mappedBy = "idParking")

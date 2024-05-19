@@ -1,8 +1,6 @@
 package fr.rp.springapiparc.dto.in;
 
-import fr.rp.springapiparc.entity.LieuEntity;
-import fr.rp.springapiparc.entity.ParkingEntity;
-import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,53 +13,72 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class ParcInDto {
 
-    @Column(name = "id_parc", nullable = false)
-    private Integer id;
-
-    @Column(name = "nom_parc", nullable = false, length = 50)
+    @Size(max = 50)
+    @NotBlank(message = "Le nom du parc ne peut pas être vide")
+    @Pattern(regexp = "^[\\p{L} -]+$", message = "Seules les lettres, les espaces et les tirets sont autorisés")
+    @NotNull(message = "Le nom du parc ne peut pas être nul")
     private String nomParc;
 
-    @Column(name = "presentation", nullable = false)
+    @NotBlank(message = "La présentation ne peut pas être vide")
+    @NotNull(message = "La présentation ne peut pas être nulle")
     private String presentation;
 
-    @Column(name = "adresse", nullable = false, length = 228)
+    @Size(max = 228)
+    @NotBlank(message = "L'adresse ne peut pas être vide")
+    @NotNull(message = "L'adresse ne peut pas être nulle")
     private String adresse;
 
-    @Column(name = "longitude_parc", nullable = false, precision = 8, scale = 6)
+    @NotBlank(message = "La longitude ne peut pas être vide")
+    @NotNull(message = "La longitude du parc ne peut pas être nulle")
+    @Digits(integer = 2, fraction = 6, message = "La précision maximale est de 2 chiffres entiers et 6 chiffres après la virgule")
     private BigDecimal longitudeParc;
 
-    @Column(name = "lattitude_parc", nullable = false, precision = 9, scale = 6)
+    @NotBlank(message = "La latitude ne peut pas être vide")
+    @NotNull(message = "La latitude du parc ne peut pas être nulle")
+    @Digits(integer = 3, fraction = 6, message = "La précision maximale est de 3 chiffres entiers et 6 chiffres après la virgule")
     private BigDecimal lattitudeParc;
 
-    @Column(name = "site_internet", nullable = false, length = 250)
+
+    @NotBlank(message = "Le site internet ne peut pas être vide")
+    @Size(max = 250)
+    @NotNull(message = "Le site internet ne peut pas être nul")
     private String siteInternet;
 
-    @Column(name = "numero_tel_parc", nullable = false)
+    @NotBlank(message = "Le numéro de téléphone du parc ne peut pas être vide")
+    @NotNull(message = "Le numéro de téléphone du parc ne peut pas être nul")
     private Integer numeroTelParc;
 
-    @Column(name = "prix_adulte", nullable = false, precision = 5, scale = 2)
+    @NotBlank(message = "Le prix adulte du parc ne peut pas être vide")
+    @NotNull(message = "Le prix adulte ne peut pas être nul")
+    @Digits(integer = 3, fraction = 2, message = "La précision maximale est de 3 chiffres entiers et 2 chiffres après la virgule")
     private BigDecimal prixAdulte;
 
-    @Column(name = "prix_enfant", nullable = false, precision = 5, scale = 2)
+    @NotBlank(message = "Le prix enfant du parc ne peut pas être vide")
+    @NotNull(message = "Le prix enfant ne peut pas être nul")
+    @Digits(integer = 3, fraction = 2, message = "La précision maximale est de 3 chiffres entiers et 2 chiffres après la virgule")
     private BigDecimal prixEnfant;
 
-    @Column(name = "url_affiliation", length = 250)
+    @Size(max = 250)
     private String urlAffiliation;
 
-    @Column(name = "restauration", nullable = false)
+    @NotBlank(message = "Le champ restauration ne peut pas être vide")
+    @NotNull(message = "Le champ restauration ne peut pas être nul")
+    @AssertTrue(message = "La valeur de restauration doit être true ou false")
     private Boolean restauration = false;
 
-    @Column(name = "boutique", nullable = false)
+    @NotBlank(message = "Le champ boutique ne peut pas être vide")
+    @NotNull(message = "Le champ boutique ne peut pas être nul")
+    @AssertTrue(message = "La valeur de boutique doit être true ou false")
     private Boolean boutique = false;
 
-    @Column(name = "sejour", nullable = false)
+    @NotBlank(message = "Le champ séjour ne peut pas être vide")
+    @NotNull(message = "Le champ séjour ne peut pas être nul")
+    @AssertTrue(message = "La valeur de séjour doit être true ou false")
     private Boolean sejour = false;
 
-    @Column(name = "acces_transport_commun", nullable = false)
+    @NotBlank(message = "Le champ accès transport commun ne peut pas être vide")
+    @NotNull(message = "Le champ accès transport commun ne peut pas être nul")
+    @AssertTrue(message = "La valeur de accès transport commun doit être true ou false")
     private Boolean accesTransportCommun = false;
-
-    private LieuEntity idLieu;
-    private ParkingEntity idParking;
-
 
 }

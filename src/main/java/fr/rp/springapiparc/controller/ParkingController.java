@@ -65,7 +65,7 @@ public class ParkingController {
     @Operation(summary = "Crée un parking", description = "Crée un parking",
             responses = {
                     @ApiResponse(responseCode = "201", description = " Parking Créer", content = @Content(schema = @Schema(implementation = ParkingInDto.class))),
-                    @ApiResponse(responseCode = "400", description = "Erreur indiquer", content = @Content),
+                    @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }
     )
@@ -88,7 +88,7 @@ public class ParkingController {
     @Operation(summary = "Modifie un parking", description = "Modifie un parking",
             responses = {
                     @ApiResponse(responseCode = "200", description = " Parking mis à jour",  content = @Content(schema = @Schema(implementation = ParkingInDto.class))),
-                    @ApiResponse(responseCode = "400", description = "Erreur indiquer", content = @Content),
+                    @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Parking non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }

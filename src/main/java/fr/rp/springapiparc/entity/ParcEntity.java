@@ -1,7 +1,9 @@
 package fr.rp.springapiparc.entity;
 
+import fr.rp.springapiparc.dto.in.ParcInDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -10,6 +12,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Entity
 @Table(name = "parc")
 public class ParcEntity {
@@ -18,7 +21,7 @@ public class ParcEntity {
     @Column(name = "id_parc", nullable = false)
     private Integer id;
 
-    @Column(name = "nom_parc", nullable = false, length = 50)
+    @Column(name = "nom_parc", nullable = false, length = 50, unique = true)
     private String nomParc;
 
     @Lob
@@ -84,4 +87,22 @@ public class ParcEntity {
     @OneToMany(mappedBy = "idParc")
     private Set<PeriodeEntity> periodes = new LinkedHashSet<>();
 
+    public ParcEntity(ParcInDto parcInDto,LieuEntity lieuEntity, ParkingEntity parkingEntity) {
+        this.nomParc = parcInDto.getNomParc();
+        this.presentation = parcInDto.getPresentation();
+        this.adresse = parcInDto.getAdresse();
+        this.longitudeParc = parcInDto.getLongitudeParc();
+        this.lattitudeParc = parcInDto.getLattitudeParc();
+        this.siteInternet = parcInDto.getSiteInternet();
+        this.numeroTelParc = parcInDto.getNumeroTelParc();
+        this.prixAdulte = parcInDto.getPrixAdulte();
+        this.prixEnfant = parcInDto.getPrixEnfant();
+        this.urlAffiliation = parcInDto.getUrlAffiliation();
+        this.restauration = parcInDto.getRestauration();
+        this.boutique = parcInDto.getBoutique();
+        this.sejour = parcInDto.getSejour();
+        this.accesTransportCommun = parcInDto.getAccesTransportCommun();
+        this.idLieu = lieuEntity;
+        this.idParking = parkingEntity;
+    }
 }

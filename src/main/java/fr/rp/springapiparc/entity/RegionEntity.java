@@ -20,7 +20,7 @@ public class RegionEntity {
     @Column(name = "id_region", nullable = false)
     private Integer id;
 
-    @Column(name = "nom_region", nullable = false, length = 50)
+    @Column(name = "nom_region", nullable = false, length = 50, unique = true)
     private String nomRegion;
 
     @OneToMany(mappedBy = "idRegion")

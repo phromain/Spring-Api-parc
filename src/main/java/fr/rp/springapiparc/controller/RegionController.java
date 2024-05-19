@@ -73,7 +73,7 @@ public class RegionController {
     @Operation(summary = "Crée une region", description = "Crée une region",
             responses = {
                     @ApiResponse(responseCode = "201", description = " Région Créer", content = @Content(schema = @Schema(implementation = RegionInDto.class))),
-                    @ApiResponse(responseCode = "400", description = "Erreur indiquer", content = @Content),
+                    @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }
     )
@@ -96,7 +96,7 @@ public class RegionController {
     @Operation(summary = "Crée un lieu par un IDregion", description = "Crée un lieu par un IDregion",
             responses = {
                     @ApiResponse(responseCode = "201", description = " Lieu Créer", content = @Content(schema = @Schema(implementation = RegionInDto.class))),
-                    @ApiResponse(responseCode = "400", description = "Erreur indiquer", content = @Content),
+                    @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Region non trouvée", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }
@@ -131,7 +131,7 @@ public class RegionController {
     @Operation(summary = "Modifie une region", description = "Modifie une region",
             responses = {
                     @ApiResponse(responseCode = "200", description = " Région mis à jour",  content = @Content(schema = @Schema(implementation = RegionInDto.class))),
-                    @ApiResponse(responseCode = "400", description = "Erreur indiquer ", content = @Content),
+                    @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Région non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }

@@ -17,7 +17,7 @@ public class AttributImgEntity {
     @Column(name = "id_attribut_img", nullable = false)
     private Integer id;
 
-    @Column(name = "lib_attribut_img", nullable = false, length = 50)
+    @Column(name = "lib_attribut_img", nullable = false, length = 50, unique = true)
     private String libAttributImg;
 
     @OneToMany(mappedBy = "idAttributImg")

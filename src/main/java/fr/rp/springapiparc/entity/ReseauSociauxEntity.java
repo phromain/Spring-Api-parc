@@ -20,7 +20,7 @@ public class ReseauSociauxEntity {
     @Column(name = "id_reseau_sociaux", nullable = false)
     private Integer id;
 
-    @Column(name = "lib_reseau", length = 50)
+    @Column(name = "lib_reseau", length = 50, unique = true)
     private String libReseau;
 
     @OneToMany(mappedBy = "idReseauSociaux")

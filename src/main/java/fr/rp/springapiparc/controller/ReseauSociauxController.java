@@ -70,7 +70,7 @@ public class ReseauSociauxController {
     @Operation(summary = "Crée un reseauSociaux", description = "Crée un reseauSociaux",
             responses = {
                     @ApiResponse(responseCode = "201", description = " ReseauSociaux Créer", content = @Content(schema = @Schema(implementation = TypeParcInDto.class))),
-                    @ApiResponse(responseCode = "400", description = "Erreur indiquer", content = @Content),
+                    @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }
     )
@@ -92,7 +92,7 @@ public class ReseauSociauxController {
     @Operation(summary = "Modifie un reseauSociaux", description = "Modifie un reseauSociaux",
             responses = {
                     @ApiResponse(responseCode = "200", description = " ReseauSociaux mis à jour",  content = @Content(schema = @Schema(implementation = ReseauSociauxInDto.class))),
-                    @ApiResponse(responseCode = "400", description = "Erreur indiquer ", content = @Content),
+                    @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
                     @ApiResponse(responseCode = "404", description = "ReseauSociaux non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }

@@ -16,7 +16,7 @@ public class UtilisateurEntity {
     @Column(name = "id_utilisateur", nullable = false)
     private Integer id;
 
-    @Column(name = "pseudo", nullable = false, length = 50)
+    @Column(name = "pseudo", nullable = false, length = 50, unique = true)
     private String pseudo;
 
     @Column(name = "email", nullable = false, length = 100)

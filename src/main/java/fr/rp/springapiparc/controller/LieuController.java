@@ -64,7 +64,7 @@ public class LieuController {
     @Operation(summary = "Modifie un lieu", description = "Modifie un lieu",
             responses = {
                     @ApiResponse(responseCode = "200", description = " Lieu mis à jour",  content = @Content(schema = @Schema(implementation = LieuInDto.class))),
-                    @ApiResponse(responseCode = "400", description = "Erreur indiquer", content = @Content),
+                    @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Lieu non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }

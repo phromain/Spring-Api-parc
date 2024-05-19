@@ -17,7 +17,7 @@ public class TypeParcEntity {
     @Column(name = "id_type", nullable = false)
     private Integer id;
 
-    @Column(name = "libelle_type_parc", nullable = false, length = 20)
+    @Column(name = "libelle_type_parc", nullable = false, length = 20, unique = true)
     private String libelleTypeParc;
 
     public TypeParcEntity(TypeParcInDto typeParcInDto) {
