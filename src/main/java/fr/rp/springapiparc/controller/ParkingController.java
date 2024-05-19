@@ -51,7 +51,7 @@ public class ParkingController {
             })
     public ResponseEntity<?> getParkingById(@PathVariable Integer idParking) {
         Optional<ParkingEntity> optionalParkingEntity = parkingRepository.findById(idParking);
-        if (!optionalParkingEntity.isPresent()){
+        if (optionalParkingEntity.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Parking non trouvé");
         }
@@ -73,7 +73,8 @@ public class ParkingController {
         try {
             ParkingEntity parkingEntity = new ParkingEntity(parkingInDto);
             parkingRepository.save(parkingEntity);
-            return new ResponseEntity<>(parkingEntity, HttpStatus.CREATED);
+            ParkingOutDto parkingOutDto = new ParkingOutDto(parkingEntity);
+            return new ResponseEntity<>(parkingOutDto, HttpStatus.CREATED);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         } catch (Exception e){
@@ -95,14 +96,15 @@ public class ParkingController {
     public ResponseEntity<?> updateParking (@PathVariable Integer idParking, @Valid @RequestBody ParkingInDto parkingInDto) {
         try {
             Optional<ParkingEntity> optionalParkingEntity = parkingRepository.findById(idParking);
-            if (!optionalParkingEntity.isPresent()){
+            if (optionalParkingEntity.isEmpty()){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("Parking non trouvé");
             }
             ParkingEntity parkingEntity = optionalParkingEntity.get();
             parkingEntity.setParking(parkingInDto.getParking());
             parkingRepository.save(parkingEntity);
-            return new ResponseEntity<>(parkingEntity, HttpStatus.OK);
+            ParkingOutDto parkingOutDto = new ParkingOutDto(parkingEntity);
+            return new ResponseEntity<>(parkingOutDto, HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(e.getMessage());
@@ -122,7 +124,7 @@ public class ParkingController {
     )
     public ResponseEntity<?> deleteParking (@PathVariable Integer idParking) {
         Optional<ParkingEntity> optionalParkingEntity = parkingRepository.findById(idParking);
-        if (!optionalParkingEntity.isPresent()){
+        if (optionalParkingEntity.isEmpty()){
             return new ResponseEntity<>("Parking non trouvé", HttpStatus.NOT_FOUND);
         }
         try {

@@ -59,7 +59,7 @@ public class RegionController {
             })
     public ResponseEntity<?> getRegionById(@PathVariable Integer idRegion) {
         Optional<RegionEntity> optionalRegionEntity = regionRepository.findById(idRegion);
-        if (!optionalRegionEntity.isPresent()){
+        if (optionalRegionEntity.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Region non trouvée");
         }
@@ -81,7 +81,8 @@ public class RegionController {
         try {
             RegionEntity regionEntity = new RegionEntity(regionInDto);
             regionRepository.save(regionEntity);
-            return new ResponseEntity<>(regionEntity, HttpStatus.CREATED);
+            RegionOutDto regionOutDto = new RegionOutDto(regionEntity);
+            return new ResponseEntity<>(regionOutDto, HttpStatus.CREATED);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         } catch (Exception e){
@@ -104,7 +105,7 @@ public class RegionController {
         Optional<RegionEntity> optionalRegionEntity;
         try {
             optionalRegionEntity = regionRepository.findById(idRegion);
-            if (!optionalRegionEntity.isPresent()) {
+            if (optionalRegionEntity.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("Région non trouvé");
             }
@@ -138,14 +139,15 @@ public class RegionController {
     public ResponseEntity<?> updateRegion (@PathVariable Integer idRegion, @Valid @RequestBody RegionInDto regionInDto) {
         try {
             Optional<RegionEntity> optionalRegionEntity = regionRepository.findById(idRegion);
-            if (!optionalRegionEntity.isPresent()){
+            if (optionalRegionEntity.isEmpty()){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("Région non trouvé");
             }
             RegionEntity regionEntity = optionalRegionEntity.get();
             regionEntity.setNomRegion(regionInDto.getNomRegion());
             regionRepository.save(regionEntity);
-            return new ResponseEntity<>(regionEntity, HttpStatus.OK);
+            RegionOutDto regionOutDto = new RegionOutDto(regionEntity);
+            return new ResponseEntity<>(regionOutDto, HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(e.getMessage());
@@ -166,7 +168,7 @@ public class RegionController {
     )
     public ResponseEntity<?> deleteRegion (@PathVariable Integer idRegion) {
         Optional<RegionEntity> optionalRegionEntity = regionRepository.findById(idRegion);
-        if (!optionalRegionEntity.isPresent()){
+        if (optionalRegionEntity.isEmpty()){
             return new ResponseEntity<>("Région non trouvée", HttpStatus.NOT_FOUND);
         }
         try {

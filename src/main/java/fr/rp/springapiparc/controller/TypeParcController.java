@@ -54,7 +54,7 @@ public class TypeParcController {
             })
     public ResponseEntity<?> getTypeParcById(@PathVariable Integer idType) {
         Optional<TypeParcEntity> optionalTypeParcEntity = typeParcRepository.findById(idType);
-        if (!optionalTypeParcEntity.isPresent()){
+        if (optionalTypeParcEntity.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Type non trouvé");
         }
@@ -77,7 +77,8 @@ public class TypeParcController {
         try {
             TypeParcEntity typeParcEntity = new TypeParcEntity(typeParcInDto);
             typeParcRepository.save(typeParcEntity);
-            return new ResponseEntity<>(typeParcEntity, HttpStatus.CREATED);
+            TypeParcOutDto typeParcOutDto = new TypeParcOutDto(typeParcEntity);
+            return new ResponseEntity<>(typeParcOutDto, HttpStatus.CREATED);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         } catch (Exception e){
@@ -98,14 +99,15 @@ public class TypeParcController {
     public ResponseEntity<?> updateTypeParc (@PathVariable Integer idType, @Valid @RequestBody TypeParcInDto typeParcInDto) {
         try {
             Optional<TypeParcEntity> optionalTypeParc = typeParcRepository.findById(idType);
-            if (!optionalTypeParc.isPresent()){
+            if (optionalTypeParc.isEmpty()){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("Type non trouvé");
             }
             TypeParcEntity typeParcEntity = optionalTypeParc.get();
             typeParcEntity.setLibelleTypeParc(typeParcInDto.getLibelleTypeParc());
             typeParcRepository.save(typeParcEntity);
-            return new ResponseEntity<>(typeParcEntity, HttpStatus.OK);
+            TypeParcOutDto typeParcOutDto = new TypeParcOutDto(typeParcEntity);
+            return new ResponseEntity<>(typeParcOutDto, HttpStatus.OK);
         } catch (ConstraintViolationException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(e.getMessage());
@@ -125,7 +127,7 @@ public class TypeParcController {
     )
     public ResponseEntity<?> deleteType (@PathVariable Integer idType) {
         Optional<TypeParcEntity> optionalTypeParcEntity = typeParcRepository.findById(idType);
-        if (!optionalTypeParcEntity.isPresent()){
+        if (optionalTypeParcEntity.isEmpty()){
             return new ResponseEntity<>("Type non trouvé", HttpStatus.NOT_FOUND);
         }
         try {
