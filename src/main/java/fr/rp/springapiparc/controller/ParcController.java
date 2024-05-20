@@ -82,7 +82,6 @@ public class ParcController {
                     @ApiResponse(responseCode = "404", description = "Lieu non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             })
-
     public ResponseEntity<?> createParcByLieuAndIdParking(@PathVariable Integer idLieu, @PathVariable Integer idParking, @Valid @RequestBody ParcInDto parcInDto) {
         try {
         Optional<LieuEntity> optionalLieuEntity = lieuRepository.findById(idLieu);
@@ -90,7 +89,7 @@ public class ParcController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Lieu non trouvé");
         }
-        Optional<ParkingEntity> optionalParkingEntity = parkingRepository.findById(idLieu);
+        Optional<ParkingEntity> optionalParkingEntity = parkingRepository.findById(idParking);
         if (optionalParkingEntity.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Parking non trouvé");
