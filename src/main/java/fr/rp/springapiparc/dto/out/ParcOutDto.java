@@ -1,9 +1,12 @@
 package fr.rp.springapiparc.dto.out;
 
 import com.github.slugify.Slugify;
-import fr.rp.springapiparc.entity.ParcEntity;
+import fr.rp.springapiparc.entity.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Getter
@@ -14,6 +17,9 @@ public class ParcOutDto {
     private String nomParc;
     private String slugParc;
     private String presentation;
+    private Set<String> typeParc;
+    private Set<String> imagePrez;
+    private Set<String> periodeOuverture;
     private String nomRegion;
     private Integer idRegion;
     private boolean parkingGratuit;
@@ -24,16 +30,29 @@ public class ParcOutDto {
     private String prixAdulte;
     private String prixEnfant;
 
-    // Liste types
-    // Date pour slideBar
-    // Images
-
     public ParcOutDto(ParcEntity parcEntity) {
         this.idParc = parcEntity.getId();
         this.nomParc = parcEntity.getNomParc();
 
         final Slugify slg = Slugify.builder().build();
         this.slugParc = slg.slugify(parcEntity.getNomParc());
+
+        this.typeParc = new HashSet<>();
+        for (TypeParcEntity typeParcEntity : parcEntity.getTypeParcs()) {
+            this.typeParc.add(typeParcEntity.getLibelleTypeParc());
+        }
+        this.imagePrez = new HashSet<>();
+        for (ImageEntity imageEntity : parcEntity.getImages()) {
+            if (imageEntity.getIdAttributImg().getId() == 1) {
+                this.imagePrez.add(imageEntity.getRefImg());
+            }
+        }
+
+        this.periodeOuverture = new HashSet<>();
+        for (PeriodeEntity periodeEntity : parcEntity.getPeriodes()) {
+            this.periodeOuverture.add(periodeEntity.getDateOuverture().toString() + " - " + periodeEntity.getDateFermeture().toString());
+        }
+
 
         this.presentation = parcEntity.getPresentation().length() > 250 ? parcEntity.getPresentation().substring(0, 250) + "..." : parcEntity.getPresentation();
         this.nomRegion = parcEntity.getIdLieu().getIdRegion().getNomRegion();
