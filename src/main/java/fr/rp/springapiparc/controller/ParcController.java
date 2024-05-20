@@ -1,14 +1,11 @@
 package fr.rp.springapiparc.controller;
 
 import fr.rp.springapiparc.dto.in.ParcInDto;
-import fr.rp.springapiparc.dto.in.TypeParcInDto;
 import fr.rp.springapiparc.dto.out.ParcDetailOutDto;
 import fr.rp.springapiparc.dto.out.ParcOutDto;
-import fr.rp.springapiparc.dto.out.TypeParcOutDto;
 import fr.rp.springapiparc.entity.LieuEntity;
 import fr.rp.springapiparc.entity.ParcEntity;
 import fr.rp.springapiparc.entity.ParkingEntity;
-import fr.rp.springapiparc.entity.TypeParcEntity;
 import fr.rp.springapiparc.repository.LieuRepository;
 import fr.rp.springapiparc.repository.ParcRepository;
 import fr.rp.springapiparc.repository.ParkingRepository;

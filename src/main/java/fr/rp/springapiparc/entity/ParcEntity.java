@@ -1,6 +1,5 @@
 package fr.rp.springapiparc.entity;
 
-import fr.rp.springapiparc.dto.in.LieuInDto;
 import fr.rp.springapiparc.dto.in.ParcInDto;
 import jakarta.persistence.*;
 import lombok.Getter;
