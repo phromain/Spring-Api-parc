@@ -1,11 +1,14 @@
 package fr.rp.springapiparc.controller;
 
 import fr.rp.springapiparc.dto.in.ParcInDto;
+import fr.rp.springapiparc.dto.in.TypeParcInDto;
 import fr.rp.springapiparc.dto.out.ParcDetailOutDto;
 import fr.rp.springapiparc.dto.out.ParcOutDto;
+import fr.rp.springapiparc.dto.out.TypeParcOutDto;
 import fr.rp.springapiparc.entity.LieuEntity;
 import fr.rp.springapiparc.entity.ParcEntity;
 import fr.rp.springapiparc.entity.ParkingEntity;
+import fr.rp.springapiparc.entity.TypeParcEntity;
 import fr.rp.springapiparc.repository.LieuRepository;
 import fr.rp.springapiparc.repository.ParcRepository;
 import fr.rp.springapiparc.repository.ParkingRepository;
@@ -107,8 +110,63 @@ public class ParcController {
         }
     }
 
+    @PutMapping("/{idParc}")
+    @Transactional
+    @Operation(summary = "Modifie un type", description = "Modifie un type",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = " Parc mis à jour",  content = @Content(schema = @Schema(implementation = ParcInDto.class))),
+                    @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "Parc non trouvé", content = @Content),
+                    @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
+            }
+    )
+    public ResponseEntity<?> updateParc (@PathVariable Integer idParc, @Valid @RequestBody ParcInDto parcInDto) {
+        try {
+            Optional<ParcEntity> optionalParcEntity = parcRepository.findById(idParc);
+            if (optionalParcEntity.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Parc non trouvé");
+            }
+            ParcEntity parcEntity = optionalParcEntity.get();
+            parcEntity.insertUpdateValuesParc(parcInDto);
+            parcRepository.save(parcEntity);
+            ParcDetailOutDto parcDetailOutDto = new ParcDetailOutDto(parcEntity);
+            return new ResponseEntity<>(parcDetailOutDto, HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Une erreur est survenue ");
+        }
+    }
 
 
+
+
+
+    @DeleteMapping("/{idParc}")
+    @Transactional
+    @Operation(summary = "Supprime un Parc", description = "Supprime un Parc",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Parc Supprimé", content = @Content),
+                    @ApiResponse(responseCode = "404", description = "Parc non trouvé", content = @Content),
+                    @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue",content = @Content)
+            }
+    )
+    public ResponseEntity<?> deleteParc (@PathVariable Integer idParc) {
+        Optional<ParcEntity> optionalParcEntity = parcRepository.findById(idParc);
+        if (optionalParcEntity.isEmpty()){
+            return new ResponseEntity<>("Parc non trouvé", HttpStatus.NOT_FOUND);
+        }
+        try {
+            parcRepository.deleteById(idParc);
+            return new ResponseEntity<>("Parc Supprimé", HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity<>("Une erreur est survenue ", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
 

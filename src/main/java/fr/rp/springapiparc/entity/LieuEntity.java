@@ -3,6 +3,7 @@ package fr.rp.springapiparc.entity;
 import fr.rp.springapiparc.dto.in.LieuInDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.LinkedHashSet;
@@ -11,6 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "lieu")
 public class LieuEntity {
     @Id
@@ -31,15 +33,14 @@ public class LieuEntity {
     @OneToMany(mappedBy = "idLieu")
     private Set<ParcEntity> parcs = new LinkedHashSet<>();
 
-    public void insertUpdateValues(LieuInDto lieuInDto) {
+    public void insertUpdateValuesLieu(LieuInDto lieuInDto) {
         this.ville = lieuInDto.getVille();
         this.codePostal = lieuInDto.getCodePostal();
     }
-    public void insertNewLieu(LieuInDto lieuInDto, RegionEntity regionEntity) {
+
+    public LieuEntity(LieuInDto lieuInDto, RegionEntity regionEntity) {
         this.ville = lieuInDto.getVille();
         this.codePostal = lieuInDto.getCodePostal();
         this.idRegion = regionEntity;
     }
-
-
 }

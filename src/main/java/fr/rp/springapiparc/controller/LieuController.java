@@ -77,7 +77,7 @@ public class LieuController {
                         .body("Lieu non trouvé");
             }
             LieuEntity lieuEntity = optionalLieuEntity.get();
-            lieuEntity.insertUpdateValues(lieuInDto);
+            lieuEntity.insertUpdateValuesLieu(lieuInDto);
             lieuRepository.save(lieuEntity);
             LieuOutDto lieuOutDto = new LieuOutDto(lieuEntity);
             return new ResponseEntity<>(lieuOutDto, HttpStatus.OK);

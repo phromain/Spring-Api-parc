@@ -113,9 +113,8 @@ public class RegionController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
         try {
-            LieuEntity lieuEntity = new LieuEntity();
             RegionEntity regionEntity = optionalRegionEntity.get();
-            lieuEntity.insertNewLieu(lieuInDto,regionEntity);
+            LieuEntity lieuEntity = new LieuEntity(lieuInDto, regionEntity);
             lieuRepository.save(lieuEntity);
             LieuOutDto lieuOutDto = new LieuOutDto(lieuEntity);
             return new ResponseEntity<>(lieuOutDto, HttpStatus.CREATED);

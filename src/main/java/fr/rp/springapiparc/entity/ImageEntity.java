@@ -2,11 +2,13 @@ package fr.rp.springapiparc.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "images")
 public class ImageEntity {
     @Id

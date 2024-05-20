@@ -1,5 +1,6 @@
 package fr.rp.springapiparc.entity;
 
+import fr.rp.springapiparc.dto.in.LieuInDto;
 import fr.rp.springapiparc.dto.in.ParcInDto;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -104,5 +105,22 @@ public class ParcEntity {
         this.accesTransportCommun = parcInDto.getAccesTransportCommun();
         this.idLieu = lieuEntity;
         this.idParking = parkingEntity;
+    }
+
+    public void insertUpdateValuesParc(ParcInDto parcInDto) {
+        this.nomParc = parcInDto.getNomParc();
+        this.presentation = parcInDto.getPresentation();
+        this.adresse = parcInDto.getAdresse();
+        this.longitudeParc = parcInDto.getLongitudeParc();
+        this.lattitudeParc = parcInDto.getLattitudeParc();
+        this.siteInternet = parcInDto.getSiteInternet();
+        this.numeroTelParc = parcInDto.getNumeroTelParc();
+        this.prixAdulte = parcInDto.getPrixAdulte();
+        this.prixEnfant = parcInDto.getPrixEnfant();
+        this.urlAffiliation = parcInDto.getUrlAffiliation();
+        this.restauration = parcInDto.getRestauration();
+        this.boutique = parcInDto.getBoutique();
+        this.sejour = parcInDto.getSejour();
+        this.accesTransportCommun = parcInDto.getAccesTransportCommun();
     }
 }
