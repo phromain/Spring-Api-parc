@@ -2,7 +2,6 @@ package fr.rp.springapiparc.dto.out;
 
 import fr.rp.springapiparc.entity.ParcEntity;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
