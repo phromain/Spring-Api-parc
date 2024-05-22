@@ -3,10 +3,12 @@ package fr.rp.springapiparc.dto.out;
 import com.github.slugify.Slugify;
 import fr.rp.springapiparc.entity.TypeParcEntity;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class TypeParcOutDto {
     private Integer id;
     private String libelleTypeParc;

@@ -1,6 +1,7 @@
 package fr.rp.springapiparc.dto.in;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ public class ReseauSociauxInDto {
     @Size(max = 50)
     @NotBlank(message = "Le nom du réseau social ne peut pas être vide")
     @Pattern(regexp = "^[\\p{L} -]+$", message = "Seules les lettres, les espaces et les tirets sont autorisés")
+    @JsonProperty("libelleReseau")
     private String libelleReseau;
 
     public ReseauSociauxInDto(String libelleReseau) {

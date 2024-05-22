@@ -38,8 +38,8 @@ public class TypeParcController {
     public ResponseEntity<List<TypeParcOutDto>> getListTypeParc() {
         List<TypeParcEntity> listTypeParcEntity = typeParcRepository.findAll();
         List<TypeParcOutDto> listTypeParcOutDto = new ArrayList<>();
-        for (TypeParcEntity typeParc : listTypeParcEntity) {
-            TypeParcOutDto typeParcOutDto = new TypeParcOutDto(typeParc);
+        for (TypeParcEntity typeParcEntity : listTypeParcEntity) {
+            TypeParcOutDto typeParcOutDto = new TypeParcOutDto(typeParcEntity);
             listTypeParcOutDto.add(typeParcOutDto);
         }
         return new ResponseEntity<>(listTypeParcOutDto, HttpStatus.OK);

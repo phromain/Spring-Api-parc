@@ -1,5 +1,6 @@
 package fr.rp.springapiparc.dto.in;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ public class RegionInDto {
     // Attributs
     @NotBlank(message = "Le nom de région ne peut pas être vide")
     @Pattern(regexp = "^[\\p{L} -]+$", message = "Seules les lettres, les espaces et les tirets sont autorisés")
+    @JsonProperty("nomRegion")
     private String nomRegion;
 
     // Contructs
