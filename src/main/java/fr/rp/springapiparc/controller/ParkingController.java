@@ -51,7 +51,7 @@ public class ParkingController {
             })
     public ResponseEntity<?> getParkingById(@PathVariable Integer idParking) {
         Optional<ParkingEntity> optionalParkingEntity = parkingRepository.findById(idParking);
-        if (optionalParkingEntity.isEmpty()){
+        if (optionalParkingEntity.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Parking non trouvé");
         }
@@ -77,7 +77,7 @@ public class ParkingController {
             return new ResponseEntity<>(parkingOutDto, HttpStatus.CREATED);
         } catch (ConstraintViolationException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -87,16 +87,16 @@ public class ParkingController {
     @Transactional
     @Operation(summary = "Modifie un parking", description = "Modifie un parking",
             responses = {
-                    @ApiResponse(responseCode = "200", description = " Parking mis à jour",  content = @Content(schema = @Schema(implementation = ParkingInDto.class))),
+                    @ApiResponse(responseCode = "200", description = " Parking mis à jour", content = @Content(schema = @Schema(implementation = ParkingInDto.class))),
                     @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Parking non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }
     )
-    public ResponseEntity<?> updateParking (@PathVariable Integer idParking, @Valid @RequestBody ParkingInDto parkingInDto) {
+    public ResponseEntity<?> updateParking(@PathVariable Integer idParking, @Valid @RequestBody ParkingInDto parkingInDto) {
         try {
             Optional<ParkingEntity> optionalParkingEntity = parkingRepository.findById(idParking);
-            if (optionalParkingEntity.isEmpty()){
+            if (optionalParkingEntity.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body("Parking non trouvé");
             }
@@ -108,7 +108,7 @@ public class ParkingController {
         } catch (ConstraintViolationException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(e.getMessage());
-        } catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Une erreur est survenue ");
         }
@@ -120,24 +120,21 @@ public class ParkingController {
             responses = {
                     @ApiResponse(responseCode = "200", description = " Parking Supprimé", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Parking non trouvé", content = @Content),
-                    @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue",content = @Content)
+                    @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }
     )
-    public ResponseEntity<?> deleteParking (@PathVariable Integer idParking) {
+    public ResponseEntity<?> deleteParking(@PathVariable Integer idParking) {
         Optional<ParkingEntity> optionalParkingEntity = parkingRepository.findById(idParking);
-        if (optionalParkingEntity.isEmpty()){
+        if (optionalParkingEntity.isEmpty()) {
             return new ResponseEntity<>("Parking non trouvé", HttpStatus.NOT_FOUND);
         }
         try {
             parkingRepository.deleteById(idParking);
             return new ResponseEntity<>("Parking Supprimé", HttpStatus.OK);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>("Une erreur est survenue ", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 
 
 }

@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/reseauSociaux")
+@RequestMapping("/reseausociaux")
 public class ReseauSociauxController {
 
     @Autowired

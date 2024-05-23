@@ -2,6 +2,7 @@ package fr.rp.springapiparc.dto.out;
 
 import fr.rp.springapiparc.entity.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class ParcDetailOutDto {
 
     private String nomParc;

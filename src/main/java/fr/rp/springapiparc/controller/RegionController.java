@@ -140,7 +140,7 @@ public class RegionController {
             Optional<RegionEntity> optionalRegionEntity = regionRepository.findById(idRegion);
             if (optionalRegionEntity.isEmpty()){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("Région non trouvé");
+                        .body("Région non trouvée");
             }
             RegionEntity regionEntity = optionalRegionEntity.get();
             regionEntity.setNomRegion(regionInDto.getNomRegion());

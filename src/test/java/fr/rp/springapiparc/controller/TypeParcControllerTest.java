@@ -8,7 +8,6 @@ import fr.rp.springapiparc.entity.TypeParcEntity;
 import fr.rp.springapiparc.repository.TypeParcRepository;
 import io.restassured.http.ContentType;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.AssertTrue;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,6 +32,7 @@ class TypeParcControllerTest {
     List<TypeParcOutDto> listTypeParcOutDto = new ArrayList<>();
     Random rand = new Random();
     TypeParcOutDto testControleTypeParcOutDto;
+    static int indexCreateMethod;
 
     @BeforeEach
     void setUp() {
@@ -118,11 +118,12 @@ class TypeParcControllerTest {
                 .getObject(".", TypeParcOutDto.class);
 
         assertEquals(typeParcInDto.getLibelleTypeParc(), apiResponse.getLibelleTypeParc());
+        indexCreateMethod = apiResponse.getId();
+
     }
 
     @Test
     @Transactional
-    @Order(1)
     void createType400() {
         TypeParcInDto typeParcInDto = new TypeParcInDto("Test Create TypeParc1234@");
 
@@ -145,12 +146,92 @@ class TypeParcControllerTest {
     @Test
     @Transactional
     @Order(2)
-    void updateTypeParc() {
+    void updateTypeParc200() {
+        TypeParcInDto typeParcInDto = new TypeParcInDto("Test Update TypeParc");
+
+        TypeParcOutDto apiResponse = given()
+                .contentType(ContentType.JSON)
+                .body(typeParcInDto)
+                .when()
+                .put("http://localhost:8084/api/types/"+ indexCreateMethod)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .jsonPath()
+                .getObject(".", TypeParcOutDto.class);
+
+        assertEquals(typeParcInDto.getLibelleTypeParc(), apiResponse.getLibelleTypeParc());
     }
 
     @Test
     @Transactional
     @Order(3)
-    void deleteType() {
+    void updateTypeParc400() {
+        TypeParcInDto typeParcInDto = new TypeParcInDto("Test Update TypeParc@123");
+
+        ApiError errorResponse = given()
+                .contentType(ContentType.JSON)
+                .body(typeParcInDto)
+                .when()
+                .put("http://localhost:8084/api/types/" + indexCreateMethod)
+                .then()
+                .statusCode(400)
+                .extract()
+                .body()
+                .as(ApiError.class);
+
+        assertEquals(HttpStatus.BAD_REQUEST, errorResponse.getStatus());
+        assertEquals("champ : libelleTypeParc - erreur : Seules les lettres, les espaces et les tirets sont autorisés \n ", errorResponse.getMessage());
     }
+    @Test
+    @Transactional
+    void updateTypeParc404() {
+        TypeParcInDto typeParcInDto = new TypeParcInDto("Test Update TypeParc");
+
+        String errorMessage = given()
+                .contentType(ContentType.JSON)
+                .body(typeParcInDto)
+                .when()
+                .put("http://localhost:8084/api/types/" + 1000000000)
+                .then()
+                .statusCode(404)
+                .extract()
+                .body()
+                .asString();
+
+        assertEquals("Type non trouvé", errorMessage);
+    }
+
+    @Test
+    @Transactional
+    void deleteType404() {
+        String errorMessage = given()
+                .when()
+                .delete("http://localhost:8084/api/types/" + 1000000000)
+                .then()
+                .statusCode(404)
+                .extract()
+                .body()
+                .asString();
+
+        assertEquals("Type non trouvé", errorMessage);
+    }
+
+    @Test
+    @Transactional
+    @Order(4)
+    void deleteType200() {
+        String errorMessage = given()
+                .when()
+                .delete("http://localhost:8084/api/types/" + indexCreateMethod)
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .asString();
+
+        assertEquals("Suppression du type", errorMessage);
+    }
+
 }
