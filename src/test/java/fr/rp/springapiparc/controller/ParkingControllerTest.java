@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,11 +27,14 @@ class ParkingControllerTest {
 
         @Autowired
         ParkingRepository parkingRepository;
+
         List<ParkingEntity> listParkingEntity = new ArrayList<>();
         List<ParkingOutDto> listParkingOutDto = new ArrayList<>();
         Random rand = new Random();
         ParkingOutDto testControleParkingOutDto;
         static int indexCreateMethod;
+
+
 
         @BeforeEach
         void setUp() {
@@ -49,7 +53,7 @@ class ParkingControllerTest {
         void getListParking() {
             List<ParkingOutDto> apiResponse = given()
                     .when()
-                    .get("http://localhost:8084/api/parkings")
+                    .get("http://localhost:8081/api/parkings")
                     .then()
                     .statusCode(200)
                     .extract()
@@ -71,7 +75,7 @@ class ParkingControllerTest {
         void getParkingById200() {
             ParkingOutDto apiResponse = given()
                     .when()
-                    .get("http://localhost:8084/api/parkings/" + 1)
+                    .get("http://localhost:8081/api/parkings/" + 1)
                     .then()
                     .statusCode(200)
                     .extract()
@@ -87,7 +91,7 @@ class ParkingControllerTest {
         void getParkingById404() {
             String errorMessage = given()
                     .when()
-                    .get("http://localhost:8084/api/parkings/" + 1000000000)
+                    .get("http://localhost:8081/api/parkings/" + 1000000000)
                     .then()
                     .statusCode(404)
                     .extract()
@@ -107,7 +111,7 @@ class ParkingControllerTest {
                     .contentType(ContentType.JSON)
                     .body(parkingInDto)
                     .when()
-                    .post("http://localhost:8084/api/parkings")
+                    .post("http://localhost:8081/api/parkings")
                     .then()
                     .statusCode(201)
                     .extract()
@@ -129,7 +133,7 @@ class ParkingControllerTest {
                     .contentType(ContentType.JSON)
                     .body(parkingInDto)
                     .when()
-                    .post("http://localhost:8084/api/parkings")
+                    .post("http://localhost:8081/api/parkings")
                     .then()
                     .statusCode(400)
                     .extract()
@@ -151,7 +155,7 @@ class ParkingControllerTest {
                     .contentType(ContentType.JSON)
                     .body(parkingInDto)
                     .when()
-                    .put("http://localhost:8084/api/parkings/"+ indexCreateMethod)
+                    .put("http://localhost:8081/api/parkings/"+ indexCreateMethod)
                     .then()
                     .statusCode(200)
                     .extract()
@@ -172,7 +176,7 @@ class ParkingControllerTest {
                     .contentType(ContentType.JSON)
                     .body(parkingInDto)
                     .when()
-                    .put("http://localhost:8084/api/parkings/" + indexCreateMethod)
+                    .put("http://localhost:8081/api/parkings/" + indexCreateMethod)
                     .then()
                     .statusCode(400)
                     .extract()
@@ -191,7 +195,7 @@ class ParkingControllerTest {
                     .contentType(ContentType.JSON)
                     .body(parkingInDto)
                     .when()
-                    .put("http://localhost:8084/api/parkings/" + 1000000000)
+                    .put("http://localhost:8081/api/parkings/" + 1000000000)
                     .then()
                     .statusCode(404)
                     .extract()
@@ -206,7 +210,7 @@ class ParkingControllerTest {
         void deleteParking404() {
             String errorMessage = given()
                     .when()
-                    .delete("http://localhost:8084/api/parkings/" + 1000000000)
+                    .delete("http://localhost:8081/api/parkings/" + 1000000000)
                     .then()
                     .statusCode(404)
                     .extract()
@@ -222,7 +226,7 @@ class ParkingControllerTest {
         void deleteParking200() {
             String errorMessage = given()
                     .when()
-                    .delete("http://localhost:8084/api/parkings/" + indexCreateMethod)
+                    .delete("http://localhost:8081/api/parkings/" + indexCreateMethod)
                     .then()
                     .statusCode(200)
                     .extract()
