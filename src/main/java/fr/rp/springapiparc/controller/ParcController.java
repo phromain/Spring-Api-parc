@@ -22,6 +22,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/parcs")
+@CrossOrigin(origins = "http://localhost:4200")
 public class ParcController {
 
     @Autowired
@@ -50,14 +51,14 @@ public class ParcController {
         return new ResponseEntity<>(listParcOutDto, HttpStatus.OK);
     }
 
-    @GetMapping("/{idParc}")
-    @Operation(summary = "le détail d'un parc par son Id", description = "Retourne le détail d'un parc",
+    @GetMapping("/{nomParc}")
+    @Operation(summary = "le détail d'un parc par son nom", description = "Retourne le détail d'un parc",
             responses = {
                     @ApiResponse(responseCode = "200", description = " Détail Parc", content = @Content(schema = @Schema(implementation = ParcDetailOutDto.class))),
                     @ApiResponse(responseCode = "404", description = "Parc non trouvé", content = @Content)
             })
-    public ResponseEntity<?> getParcById(@PathVariable Integer idParc) {
-        Optional<ParcEntity> optionalParcEntity = parcRepository.findById(idParc);
+    public ResponseEntity<?> getParcByNom(@PathVariable String idParc) {
+        Optional<ParcEntity> optionalParcEntity = parcRepository.findByNomParc(idParc);
         if (optionalParcEntity.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Parc non trouvé");
