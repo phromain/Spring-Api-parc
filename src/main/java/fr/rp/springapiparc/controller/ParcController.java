@@ -51,14 +51,14 @@ public class ParcController {
         return new ResponseEntity<>(listParcOutDto, HttpStatus.OK);
     }
 
-    @GetMapping("/{nomParc}")
-    @Operation(summary = "le détail d'un parc par son nom", description = "Retourne le détail d'un parc",
+    @GetMapping("/{slugParc}")
+    @Operation(summary = "le détail d'un parc par son slug", description = "Retourne le détail d'un parc",
             responses = {
                     @ApiResponse(responseCode = "200", description = " Détail Parc", content = @Content(schema = @Schema(implementation = ParcDetailOutDto.class))),
                     @ApiResponse(responseCode = "404", description = "Parc non trouvé", content = @Content)
             })
-    public ResponseEntity<?> getParcByNom(@PathVariable String idParc) {
-        Optional<ParcEntity> optionalParcEntity = parcRepository.findByNomParc(idParc);
+    public ResponseEntity<?> getParcByNom(@PathVariable String slugParc) {
+        Optional<ParcEntity> optionalParcEntity = parcRepository.findBySlugParc(slugParc);
         if (optionalParcEntity.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("Parc non trouvé");

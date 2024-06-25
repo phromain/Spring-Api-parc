@@ -1,5 +1,6 @@
 package fr.rp.springapiparc.entity;
 
+import com.github.slugify.Slugify;
 import fr.rp.springapiparc.dto.in.ParcInDto;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -23,6 +24,9 @@ public class ParcEntity {
 
     @Column(name = "nom_parc", nullable = false, length = 50, unique = true)
     private String nomParc;
+
+    @Column(name = "slug_parc", nullable = false, length = 50, unique = true)
+    private String slugParc;
 
     @Lob
     @Column(name = "presentation", nullable = false)
@@ -90,6 +94,8 @@ public class ParcEntity {
     public ParcEntity(ParcInDto parcInDto,LieuEntity lieuEntity, ParkingEntity parkingEntity) {
         this.nomParc = parcInDto.getNomParc();
         this.presentation = parcInDto.getPresentation();
+        final Slugify slg = Slugify.builder().build();
+        this.slugParc = slg.slugify(parcInDto.getNomParc());
         this.adresse = parcInDto.getAdresse();
         this.longitudeParc = parcInDto.getLongitudeParc();
         this.lattitudeParc = parcInDto.getLattitudeParc();
@@ -109,6 +115,8 @@ public class ParcEntity {
     public void insertUpdateValuesParc(ParcInDto parcInDto) {
         this.nomParc = parcInDto.getNomParc();
         this.presentation = parcInDto.getPresentation();
+        final Slugify slg = Slugify.builder().build();
+        this.slugParc = slg.slugify(parcInDto.getNomParc());
         this.adresse = parcInDto.getAdresse();
         this.longitudeParc = parcInDto.getLongitudeParc();
         this.lattitudeParc = parcInDto.getLattitudeParc();

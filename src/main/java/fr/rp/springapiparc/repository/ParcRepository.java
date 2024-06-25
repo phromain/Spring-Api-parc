@@ -7,7 +7,7 @@ import java.util.Optional;
 
 @Repository
 public interface ParcRepository extends JpaRepository<ParcEntity, Integer> {
-    Optional<ParcEntity> findByNomParc(String nomParc);
+    Optional<ParcEntity> findBySlugParc(String slugParc);
 
 
 }
