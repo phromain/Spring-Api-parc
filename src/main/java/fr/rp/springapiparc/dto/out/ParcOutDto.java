@@ -23,6 +23,7 @@ public class ParcOutDto {
     private Set<String> imagePrez;
     private Set<String> periodeOuverture;
     private String nomRegion;
+    private String slugRegion;
     private Integer idRegion;
     private boolean parkingGratuit;
     private boolean restauration;
@@ -58,6 +59,7 @@ public class ParcOutDto {
 
         this.presentation = parcEntity.getPresentation().length() > 250 ? parcEntity.getPresentation().substring(0, 250) + "..." : parcEntity.getPresentation();
         this.nomRegion = parcEntity.getIdLieu().getIdRegion().getNomRegion();
+        this.slugRegion = slg.slugify(parcEntity.getIdLieu().getIdRegion().getNomRegion());
         this.idRegion = parcEntity.getIdLieu().getIdRegion().getId();
         this.parkingGratuit = "Gratuit".equals(parcEntity.getIdParking().getParking());
         this.restauration = parcEntity.getRestauration();

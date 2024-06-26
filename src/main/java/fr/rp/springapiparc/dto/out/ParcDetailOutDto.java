@@ -22,11 +22,20 @@ public class ParcDetailOutDto {
     private Set<String> images;
     private Set<String> periodeOuverture;
     private Map<String, String> reseauxSociaux;
+    private String siteInternet;
     private String nomRegion;
+
+    private String adresse;
+    private String ville;
+    private String codePostal;
+
+
     private boolean restauration;
     private boolean boutique;
     private boolean sejour;
     private boolean transport;
+    private String parking;
+
     private String prixAdulte;
     private String prixEnfant;
 
@@ -52,11 +61,20 @@ public class ParcDetailOutDto {
             ReseauSociauxEntity reseauSociauxEntity = abonnerEntity.getIdReseauSociaux();
             this.reseauxSociaux.put(reseauSociauxEntity.getLibReseau(), abonnerEntity.getUrl());
         }
+        this.siteInternet = parcEntity.getSiteInternet();
         this.nomRegion = parcEntity.getIdLieu().getIdRegion().getNomRegion();
+        this.adresse = parcEntity.getAdresse();
+        this.ville = parcEntity.getIdLieu().getVille();
+        this.codePostal = parcEntity.getIdLieu().getCodePostal();
+
+
         this.restauration = parcEntity.getRestauration();
         this.boutique = parcEntity.getBoutique();
         this.sejour = parcEntity.getSejour();
         this.transport = parcEntity.getAccesTransportCommun();
+        this.parking = parcEntity.getIdParking().getParking();
+
+
         this.prixAdulte = parcEntity.getPrixAdulte().toString();
         this.prixEnfant = parcEntity.getPrixEnfant().toString();
     }
