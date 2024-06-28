@@ -19,7 +19,7 @@ public class ParcDetailOutDto {
     private String nomParc;
     private String presentation;
     private Set<String> typeParc;
-    private Set<String> images;
+    private Set<Map<String, String>> images;
     private Set<String> periodeOuverture;
     private Map<String, String> reseauxSociaux;
     private String siteInternet;
@@ -49,7 +49,9 @@ public class ParcDetailOutDto {
         }
         this.images = new HashSet<>();
         for (ImageEntity imageEntity : parcEntity.getImages()) {
-            this.images.add(imageEntity.getRefImg());
+            Map<String, String> imageMap = new HashMap<>();
+            imageMap.put(imageEntity.getIdAttributImg().getLibAttributImg(), imageEntity.getRefImg());
+            this.images.add(imageMap);
         }
 
         this.periodeOuverture = new HashSet<>();
