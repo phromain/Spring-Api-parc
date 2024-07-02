@@ -4,8 +4,10 @@ import fr.rp.springapiparc.dto.in.ParcInDto;
 import fr.rp.springapiparc.dto.out.*;
 import fr.rp.springapiparc.entity.*;
 import fr.rp.springapiparc.repository.*;
+import fr.rp.springapiparc.service.ApikeyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.ConstraintViolationException;
@@ -34,14 +36,85 @@ public class ParcController {
     @Autowired
     private ParkingRepository parkingRepository;
 
+    @Autowired
+    private ApikeyService apikeyService;
 
 
     @GetMapping("")
     @Operation(summary = "Affiche la liste des parcs", description = "Retourne une liste de parc",
             responses = {
-                    @ApiResponse(responseCode = "200", description = " Liste Parc")
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = " Liste Parc",
+                            content = @Content(
+                                    schema = @Schema(implementation = ParcOutDto[].class),
+                                    examples = {
+                                            @ExampleObject(
+                                                    name = "Exemple de réponse",
+                                                    value = "[\n" +
+                                                            "  {\n" +
+                                                            "    \"idParc\": 1,\n" +
+                                                            "    \"nomParc\": \"Dennlys-parc\",\n" +
+                                                            "    \"slugParc\": \"dennlys-parc\",\n" +
+                                                            "    \"presentation\": \"Dennlys Parc fait sans aucun doute partie des meilleurs parcs d’attractions français destinés aux sorties en famille. Tout le monde y trouve de quoi combler ses envies, quel que soit son âge ou sa taille.\",\n" +
+                                                            "    \"typeParc\": [\n" +
+                                                            "      \"Attraction\"\n" +
+                                                            "    ],\n" +
+                                                            "    \"imagePrez\": [\n" +
+                                                            "      \"prez-Dennlys-parc\"\n" +
+                                                            "    ],\n" +
+                                                            "    \"periodeOuverture\": [\n" +
+                                                            "      \"2024-06-08 - 2024-06-09\",\n" +
+                                                            "    ],\n" +
+                                                            "    \"nomRegion\": \"Hauts-de-France\",\n" +
+                                                            "    \"slugRegion\": \"hauts-de-france\",\n" +
+                                                            "    \"idRegion\": 5,\n" +
+                                                            "    \"parkingGratuit\": true,\n" +
+                                                            "    \"restauration\": true,\n" +
+                                                            "    \"boutique\": true,\n" +
+                                                            "    \"sejour\": false,\n" +
+                                                            "    \"transport\": false,\n" +
+                                                            "    \"prixAdulte\": \"21.00\",\n" +
+                                                            "    \"prixEnfant\": \"18.00\"\n" +
+                                                            "  },\n" +
+                                                            "  {\n" +
+                                                            "    \"idParc\": 2,\n" +
+                                                            "    \"nomParc\": \"La Mer de Sable\",\n" +
+                                                            "    \"slugParc\": \"la-mer-de-sable\",\n" +
+                                                            "    \"presentation\": \"la Mer de Sable est sans doute le plus vieux parc à thème en activité en France. Véritable coin de paradis pour les amateurs de l’univers des cow-boys. Partez à l’aventure de la Mer de Sable dans un cadre naturel exceptionnel…Des Portes du Désert au ...\",\n" +
+                                                            "    \"typeParc\": [\n" +
+                                                            "      \"Attraction\",\n" +
+                                                            "      \"Spectacle\"\n" +
+                                                            "    ],\n" +
+                                                            "    \"imagePrez\": [\n" +
+                                                            "      \"prez-La Mer de Sable\"\n" +
+                                                            "    ],\n" +
+                                                            "    \"periodeOuverture\": [\n" +
+                                                            "      \"2024-09-07 - 2024-09-08\",\n" +
+                                                            "      \"2024-05-08 - 2024-05-12\",\n" +
+                                                            "    ],\n" +
+                                                            "    \"nomRegion\": \"Hauts-de-France\",\n" +
+                                                            "    \"slugRegion\": \"hauts-de-france\",\n" +
+                                                            "    \"idRegion\": 5,\n" +
+                                                            "    \"parkingGratuit\": true,\n" +
+                                                            "    \"restauration\": true,\n" +
+                                                            "    \"boutique\": true,\n" +
+                                                            "    \"sejour\": false,\n" +
+                                                            "    \"transport\": false,\n" +
+                                                            "    \"prixAdulte\": \"30.50\",\n" +
+                                                            "    \"prixEnfant\": \"25.00\"\n" +
+                                                            "  }\n" +
+                                                            "]"
+                                            )
+                                    }
+                            )
+                    ),
+                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content)
             })
-    public ResponseEntity<List<ParcOutDto>> getListParc() {
+    public ResponseEntity<?> getListParc(@RequestHeader(value = "apikey", required = true) String apikey)  {
+        if (!apikeyService.validateApiKey(apikey)) {
+            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+        }
         List<ParcEntity> listParcEntity = parcRepository.findAll();
         List<ParcOutDto> listParcOutDto = new ArrayList<>();
         for (ParcEntity parcEntity : listParcEntity) {
@@ -55,9 +128,13 @@ public class ParcController {
     @Operation(summary = "le détail d'un parc par son slug", description = "Retourne le détail d'un parc",
             responses = {
                     @ApiResponse(responseCode = "200", description = " Détail Parc", content = @Content(schema = @Schema(implementation = ParcDetailOutDto.class))),
+                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Parc non trouvé", content = @Content)
             })
-    public ResponseEntity<?> getParcByNom(@PathVariable String slugParc) {
+    public ResponseEntity<?> getParcByNom(@PathVariable String slugParc,@RequestHeader(value = "apikey", required = true) String apikey)  {
+        if (!apikeyService.validateApiKey(apikey)) {
+            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+        }
         Optional<ParcEntity> optionalParcEntity = parcRepository.findBySlugParc(slugParc);
         if (optionalParcEntity.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -74,11 +151,15 @@ public class ParcController {
             responses = {
                     @ApiResponse(responseCode = "200", description = " Détail Parc", content = @Content(schema = @Schema(implementation = ParcDetailOutDto.class))),
                     @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Lieu non trouvé", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Lieu non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             })
-    public ResponseEntity<?> createParcByLieuAndIdParking(@PathVariable Integer idLieu, @PathVariable Integer idParking, @Valid @RequestBody ParcInDto parcInDto) {
+    public ResponseEntity<?> createParcByLieuAndIdParking(@PathVariable Integer idLieu, @PathVariable Integer idParking, @Valid @RequestBody ParcInDto parcInDto,@RequestHeader(value = "apikey", required = true) String apikey)  {
+        if (!apikeyService.validateApiKey(apikey)) {
+            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+        }
         try {
         Optional<LieuEntity> optionalLieuEntity = lieuRepository.findById(idLieu);
         if (optionalLieuEntity.isEmpty()) {
@@ -109,11 +190,15 @@ public class ParcController {
             responses = {
                     @ApiResponse(responseCode = "200", description = " Parc mis à jour",  content = @Content(schema = @Schema(implementation = ParcInDto.class))),
                     @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Parc non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }
     )
-    public ResponseEntity<?> updateParc (@PathVariable Integer idParc, @Valid @RequestBody ParcInDto parcInDto) {
+    public ResponseEntity<?> updateParc (@PathVariable Integer idParc, @Valid @RequestBody ParcInDto parcInDto,@RequestHeader(value = "apikey", required = true) String apikey)  {
+        if (!apikeyService.validateApiKey(apikey)) {
+            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+        }
         try {
             Optional<ParcEntity> optionalParcEntity = parcRepository.findById(idParc);
             if (optionalParcEntity.isEmpty()){
@@ -143,11 +228,15 @@ public class ParcController {
     @Operation(summary = "Supprime un Parc", description = "Supprime un Parc",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Parc Supprimé", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Parc non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue",content = @Content)
             }
     )
-    public ResponseEntity<?> deleteParc (@PathVariable Integer idParc) {
+    public ResponseEntity<?> deleteParc (@PathVariable Integer idParc,@RequestHeader(value = "apikey", required = true) String apikey)  {
+        if (!apikeyService.validateApiKey(apikey)) {
+            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+        }
         Optional<ParcEntity> optionalParcEntity = parcRepository.findById(idParc);
         if (optionalParcEntity.isEmpty()){
             return new ResponseEntity<>("Parc non trouvé", HttpStatus.NOT_FOUND);

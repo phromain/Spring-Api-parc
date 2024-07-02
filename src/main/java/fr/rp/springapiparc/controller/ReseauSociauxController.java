@@ -6,8 +6,10 @@ import fr.rp.springapiparc.dto.in.TypeParcInDto;
 import fr.rp.springapiparc.dto.out.ReseauSociauxOutDto;
 import fr.rp.springapiparc.entity.ReseauSociauxEntity;
 import fr.rp.springapiparc.repository.ReseauSociauxRepository;
+import fr.rp.springapiparc.service.ApikeyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.ConstraintViolationException;
@@ -30,14 +32,43 @@ public class ReseauSociauxController {
     @Autowired
     private ReseauSociauxRepository reseauSociauxRepository;
 
-
+    @Autowired
+    private ApikeyService apikeyService;
     @GetMapping("")
     @Operation(summary = "Affiche la liste des reseauSociauxs", description = "Retourne une liste des reseauSociauxs",
             responses = {
-                    @ApiResponse(responseCode = "200", description = " Liste ReseauSociaux")
-
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = " Liste ReseauSociaux",
+                            content = @Content(
+                                    schema = @Schema(implementation = ReseauSociauxOutDto[].class),
+                                    examples = {
+                                            @ExampleObject(
+                                                    name = "Exemple de réponse",
+                                                    value = "[\n" +
+                                                            "  {\n" +
+                                                            "    \"id\": 1,\n" +
+                                                            "    \"libelleReseau\": \"facebook\"\n" +
+                                                            "  },\n" +
+                                                            "  {\n" +
+                                                            "    \"id\": 2,\n" +
+                                                            "    \"libelleReseau\": \"X\"\n" +
+                                                            "  },\n" +
+                                                            "  {\n" +
+                                                            "    \"id\": 3,\n" +
+                                                            "    \"libelleReseau\": \"Instagram\"\n" +
+                                                            "  }\n" +
+                                                            "]"
+                                            )
+                                    }
+                            )
+                    ),
+                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content)
             })
-    public ResponseEntity<List<ReseauSociauxOutDto>> getListReseauSociaux() {
+    public ResponseEntity<?> getListReseauSociaux(@RequestHeader(value = "apikey", required = true) String apikey)  {
+        if (!apikeyService.validateApiKey(apikey)) {
+            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+        }
         List<ReseauSociauxEntity> listReseauSociauxEntity = reseauSociauxRepository.findAll();
         List<ReseauSociauxOutDto> listReseauSociauxOutDto = new ArrayList<>();
         for (ReseauSociauxEntity reseauSociauxEntity : listReseauSociauxEntity) {
@@ -53,9 +84,13 @@ public class ReseauSociauxController {
     @Operation(summary = "le détail d'un reseauSociaux par son Id", description = "Retourne le détail d'un reseauSociaux",
             responses = {
                     @ApiResponse(responseCode = "200", description = " Détail ReseauSociaux", content = @Content(schema = @Schema(implementation = ReseauSociauxOutDto.class))),
+                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "ReseauSociaux non trouvé", content = @Content)
             })
-    public ResponseEntity<?> getReseauSociauxById(@PathVariable Integer idReseauSociaux) {
+    public ResponseEntity<?> getReseauSociauxById(@PathVariable Integer idReseauSociaux,@RequestHeader(value = "apikey", required = true) String apikey)  {
+        if (!apikeyService.validateApiKey(apikey)) {
+            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+        }
         Optional<ReseauSociauxEntity> optionalReseauSociauxEntity = reseauSociauxRepository.findById(idReseauSociaux);
         if (optionalReseauSociauxEntity.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -72,10 +107,14 @@ public class ReseauSociauxController {
             responses = {
                     @ApiResponse(responseCode = "201", description = " ReseauSociaux Créer", content = @Content(schema = @Schema(implementation = TypeParcInDto.class))),
                     @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }
     )
-    public ResponseEntity<?> createReseauSociaux(@Valid @RequestBody ReseauSociauxInDto reseauSociauxInDto) {
+    public ResponseEntity<?> createReseauSociaux(@Valid @RequestBody ReseauSociauxInDto reseauSociauxInDto,@RequestHeader(value = "apikey", required = true) String apikey)  {
+        if (!apikeyService.validateApiKey(apikey)) {
+            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+        }
         try {
             ReseauSociauxEntity reseauSociauxEntity = new ReseauSociauxEntity(reseauSociauxInDto);
             reseauSociauxRepository.save(reseauSociauxEntity);
@@ -94,11 +133,15 @@ public class ReseauSociauxController {
             responses = {
                     @ApiResponse(responseCode = "200", description = " ReseauSociaux mis à jour",  content = @Content(schema = @Schema(implementation = ReseauSociauxInDto.class))),
                     @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "ReseauSociaux non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }
     )
-    public ResponseEntity<?> updateReseauSociaux (@PathVariable Integer idReseauSociaux, @Valid @RequestBody ReseauSociauxInDto reseauSociauxInDto) {
+    public ResponseEntity<?> updateReseauSociaux (@PathVariable Integer idReseauSociaux, @Valid @RequestBody ReseauSociauxInDto reseauSociauxInDto,@RequestHeader(value = "apikey", required = true) String apikey)  {
+        if (!apikeyService.validateApiKey(apikey)) {
+            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+        }
         try {
             Optional<ReseauSociauxEntity> optionalReseauSociauxEntity = reseauSociauxRepository.findById(idReseauSociaux);
             if (optionalReseauSociauxEntity.isEmpty()){
@@ -124,11 +167,15 @@ public class ReseauSociauxController {
     @Operation(summary = "Supprime un reseauSociaux", description = "Supprime un reseauSociaux",
             responses = {
                     @ApiResponse(responseCode = "200", description = " ReseauSociaux Supprimé", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "ReseauSociaux non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue",content = @Content)
             }
     )
-    public ResponseEntity<?> deleteReseauSociaux (@PathVariable Integer idReseauSociaux) {
+    public ResponseEntity<?> deleteReseauSociaux (@PathVariable Integer idReseauSociaux,@RequestHeader(value = "apikey", required = true) String apikey)  {
+        if (!apikeyService.validateApiKey(apikey)) {
+            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+        }
         Optional<ReseauSociauxEntity> optionalReseauSociauxEntity = reseauSociauxRepository.findById(idReseauSociaux);
         if (optionalReseauSociauxEntity.isEmpty()){
             return new ResponseEntity<>("ReseauSociaux non trouvé", HttpStatus.NOT_FOUND);

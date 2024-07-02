@@ -4,8 +4,10 @@ import fr.rp.springapiparc.dto.in.LieuInDto;
 import fr.rp.springapiparc.dto.out.LieuOutDto;
 import fr.rp.springapiparc.entity.LieuEntity;
 import fr.rp.springapiparc.repository.LieuRepository;
+import fr.rp.springapiparc.service.ApikeyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.ConstraintViolationException;
@@ -28,12 +30,50 @@ public class LieuController {
     @Autowired
     private LieuRepository lieuRepository;
 
+    @Autowired
+    private ApikeyService apikeyService;
+
     @GetMapping("")
     @Operation(summary = "Affiche la liste des lieux", description = "Retourne une liste de lieux",
             responses = {
-                    @ApiResponse(responseCode = "200", description = " Liste de Lieux")
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = " Liste de Lieux",
+                            content = @Content(
+                                    schema = @Schema(implementation = LieuOutDto[].class),
+                                    examples = {
+                                            @ExampleObject(
+                                                    name = "Exemple de réponse",
+                                                    value = "[\n" +
+                                                            "  {\n" +
+                                                            "    \"id\": 1,\n" +
+                                                            "    \"ville\": \"Dennebroeucq\",\n" +
+                                                            "    \"codePostal\": \"62560\",\n" +
+                                                            "    \"region\": \"Hauts-de-France\"\n" +
+                                                            "  },\n" +
+                                                            "  {\n" +
+                                                            "    \"id\": 2,\n" +
+                                                            "    \"ville\": \"Ermenonville\",\n" +
+                                                            "    \"codePostal\": \"60950\",\n" +
+                                                            "    \"region\": \"Hauts-de-France\"\n" +
+                                                            "  },\n" +
+                                                            "  {\n" +
+                                                            "    \"id\": 3,\n" +
+                                                            "    \"ville\": \"Wavrechain-sous-Faulx\",\n" +
+                                                            "    \"codePostal\": \"59111\",\n" +
+                                                            "    \"region\": \"Hauts-de-France\"\n" +
+                                                            "  }\n" +
+                                                            "]"
+                                            )
+                                    }
+                            )
+                    ),
+                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
             })
-    public ResponseEntity<List<LieuOutDto>> getListLieux() {
+    public ResponseEntity<?> getListLieux (@RequestHeader(value = "apikey", required = true) String apikey)  {
+        if (!apikeyService.validateApiKey(apikey)) {
+            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+        }
         List<LieuEntity> listLieuEntity = lieuRepository.findAll();
         List<LieuOutDto> listLieuOutDto = new ArrayList<>();
         for (LieuEntity lieuEntity : listLieuEntity) {
@@ -47,9 +87,13 @@ public class LieuController {
     @Operation(summary = "le détail d'une lieu par son Id", description = "Retourne le détail d'un lieu",
             responses = {
                     @ApiResponse(responseCode = "200", description = " Détail Lieu", content = @Content(schema = @Schema(implementation = LieuOutDto.class))),
+                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Lieu non trouvé", content = @Content)
             })
-    public ResponseEntity<?> getLieuById(@PathVariable Integer idLieu) {
+    public ResponseEntity<?> getLieuById(@PathVariable Integer idLieu,@RequestHeader(value = "apikey", required = true) String apikey)  {
+        if (!apikeyService.validateApiKey(apikey)) {
+            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+        }
         Optional<LieuEntity> optionalLieuEntity = lieuRepository.findById(idLieu);
         if (optionalLieuEntity.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -66,11 +110,15 @@ public class LieuController {
             responses = {
                     @ApiResponse(responseCode = "200", description = " Lieu mis à jour",  content = @Content(schema = @Schema(implementation = LieuInDto.class))),
                     @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Lieu non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }
     )
-    public ResponseEntity<?> updateLieu (@PathVariable Integer idLieu, @Valid @RequestBody LieuInDto lieuInDto) {
+    public ResponseEntity<?> updateLieu (@PathVariable Integer idLieu, @Valid @RequestBody LieuInDto lieuInDto,@RequestHeader(value = "apikey", required = true) String apikey)  {
+        if (!apikeyService.validateApiKey(apikey)) {
+            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+        }
         try {
             Optional<LieuEntity> optionalLieuEntity = lieuRepository.findById(idLieu);
             if (optionalLieuEntity.isEmpty()){
@@ -96,11 +144,15 @@ public class LieuController {
     @Operation(summary = "Supprime un lieu", description = "Supprime un lieu",
             responses = {
                     @ApiResponse(responseCode = "200", description = " Lieu Supprimé", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Lieu non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue",content = @Content)
             }
     )
-    public ResponseEntity<?> deleteLieu (@PathVariable Integer idLieu) {
+    public ResponseEntity<?> deleteLieu (@PathVariable Integer idLieu,@RequestHeader(value = "apikey", required = true) String apikey)  {
+        if (!apikeyService.validateApiKey(apikey)) {
+            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+        }
         Optional<LieuEntity> optionalLieuEntity = lieuRepository.findById(idLieu);
         if (optionalLieuEntity.isEmpty()){
             return new ResponseEntity<>("Lieu non trouvé", HttpStatus.NOT_FOUND);
