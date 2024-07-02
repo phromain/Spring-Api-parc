@@ -10,6 +10,7 @@ import fr.rp.springapiparc.repository.LieuRepository;
 import fr.rp.springapiparc.repository.RegionRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.ConstraintViolationException;
@@ -20,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import fr.rp.springapiparc.service.ApikeyService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +38,47 @@ public class RegionController {
     @Autowired
     private LieuRepository lieuRepository;
 
+    @Autowired
+    private ApikeyService apikeyService;
 
     @GetMapping("")
     @Operation(summary = "Affiche la liste des regions", description = "Retourne une liste de region",
             responses = {
-                    @ApiResponse(responseCode = "200", description = " Liste Region")
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = " Liste Region",
+                            content = @Content(
+                                    schema = @Schema(implementation = RegionOutDto[].class),
+                                    examples = {
+                                            @ExampleObject(
+                                                    name = "Exemple de réponse",
+                                                    value = "[\n" +
+                                                            "  {\n" +
+                                                            "    \"id\": 1,\n" +
+                                                            "    \"nomRegion\": \"Test 1\",\n" +
+                                                            "    \"slugRegion\": \"test-1\"\n" +
+                                                            "  },\n" +
+                                                            "  {\n" +
+                                                            "    \"id\": 2,\n" +
+                                                            "    \"nomRegion\": \"Test 2\",\n" +
+                                                            "    \"slugRegion\": \"test-2\"\n" +
+                                                            "  },\n" +
+                                                            "  {\n" +
+                                                            "    \"id\": 3,\n" +
+                                                            "    \"nomRegion\": \"Test 3\",\n" +
+                                                            "    \"slugRegion\": \"test-3\"\n" +
+                                                            "  }\n" + // Retirer la virgule en trop ici
+                                                            "]"
+                                            )
+                                    }
+                            )
+                    ),
+                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content)
             })
-    public ResponseEntity<List<RegionOutDto>> getListRegion() {
+    public ResponseEntity<?> getListRegion(@RequestHeader(value = "apikey", required = true) String apikey)  {
+        if (!apikeyService.validateApiKey(apikey)) {
+            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+        }
         List<RegionEntity> listRegion = regionRepository.findAll();
         List<RegionOutDto> listRegionDto = new ArrayList<>();
         for (RegionEntity regionEntity : listRegion) {
