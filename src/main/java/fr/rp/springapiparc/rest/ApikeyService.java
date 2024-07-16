@@ -1,4 +1,4 @@
-package fr.rp.springapiparc.service;
+package fr.rp.springapiparc.rest;
 
 
 import org.springframework.boot.web.client.RestTemplateBuilder;

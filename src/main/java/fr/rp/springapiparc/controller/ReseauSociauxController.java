@@ -6,7 +6,7 @@ import fr.rp.springapiparc.dto.in.TypeParcInDto;
 import fr.rp.springapiparc.dto.out.ReseauSociauxOutDto;
 import fr.rp.springapiparc.entity.ReseauSociauxEntity;
 import fr.rp.springapiparc.repository.ReseauSociauxRepository;
-import fr.rp.springapiparc.service.ApikeyService;
+import fr.rp.springapiparc.rest.ApikeyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;

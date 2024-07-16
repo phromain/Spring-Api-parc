@@ -24,18 +24,14 @@ public class ParcDetailOutDto {
     private Map<String, String> reseauxSociaux;
     private String siteInternet;
     private String nomRegion;
-
     private String adresse;
     private String ville;
     private String codePostal;
-
-
     private boolean restauration;
     private boolean boutique;
     private boolean sejour;
     private boolean transport;
     private String parking;
-
     private String prixAdulte;
     private String prixEnfant;
 

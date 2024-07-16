@@ -5,7 +5,7 @@ import fr.rp.springapiparc.dto.in.TypeParcInDto;
 import fr.rp.springapiparc.dto.out.TypeParcOutDto;
 import fr.rp.springapiparc.entity.TypeParcEntity;
 import fr.rp.springapiparc.repository.TypeParcRepository;
-import fr.rp.springapiparc.service.ApikeyService;
+import fr.rp.springapiparc.rest.ApikeyService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
