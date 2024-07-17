@@ -33,6 +33,7 @@ class ParkingControllerTest {
         Random rand = new Random();
         ParkingOutDto testControleParkingOutDto;
         static int indexCreateMethod;
+        private static String apiKey = "JKLzcla88cadPbFS1d7jPTMODXQdkW05";
 
 
 
@@ -52,6 +53,7 @@ class ParkingControllerTest {
         @Test
         void getListParking() {
             List<ParkingOutDto> apiResponse = given()
+                    .header("apikey", apiKey)
                     .when()
                     .get("http://localhost:8081/api/parkings")
                     .then()
@@ -74,6 +76,7 @@ class ParkingControllerTest {
         @Test
         void getParkingById200() {
             ParkingOutDto apiResponse = given()
+                    .header("apikey", apiKey)
                     .when()
                     .get("http://localhost:8081/api/parkings/" + 1)
                     .then()
@@ -90,6 +93,7 @@ class ParkingControllerTest {
         @Test
         void getParkingById404() {
             String errorMessage = given()
+                    .header("apikey", apiKey)
                     .when()
                     .get("http://localhost:8081/api/parkings/" + 1000000000)
                     .then()
@@ -108,6 +112,7 @@ class ParkingControllerTest {
             ParkingInDto parkingInDto = new ParkingInDto("Test Create Parking");
 
             ParkingOutDto apiResponse = given()
+                    .header("apikey", apiKey)
                     .contentType(ContentType.JSON)
                     .body(parkingInDto)
                     .when()
@@ -130,6 +135,7 @@ class ParkingControllerTest {
             ParkingInDto parkingInDto = new ParkingInDto("Test Create Parking1234@");
 
             ApiError errorResponse = given()
+                    .header("apikey", apiKey)
                     .contentType(ContentType.JSON)
                     .body(parkingInDto)
                     .when()
@@ -152,6 +158,7 @@ class ParkingControllerTest {
             ParkingInDto parkingInDto = new ParkingInDto("Test Update Parking");
 
             ParkingOutDto apiResponse = given()
+                    .header("apikey", apiKey)
                     .contentType(ContentType.JSON)
                     .body(parkingInDto)
                     .when()
@@ -173,6 +180,7 @@ class ParkingControllerTest {
             ParkingInDto parkingInDto = new ParkingInDto("Test Update Parking@123");
 
             ApiError errorResponse = given()
+                    .header("apikey", apiKey)
                     .contentType(ContentType.JSON)
                     .body(parkingInDto)
                     .when()
@@ -192,6 +200,7 @@ class ParkingControllerTest {
             ParkingInDto parkingInDto = new ParkingInDto("Test Update Parking");
 
             String errorMessage = given()
+                    .header("apikey", apiKey)
                     .contentType(ContentType.JSON)
                     .body(parkingInDto)
                     .when()
@@ -209,6 +218,7 @@ class ParkingControllerTest {
         @Transactional
         void deleteParking404() {
             String errorMessage = given()
+                    .header("apikey", apiKey)
                     .when()
                     .delete("http://localhost:8081/api/parkings/" + 1000000000)
                     .then()
@@ -225,6 +235,7 @@ class ParkingControllerTest {
         @Order(4)
         void deleteParking200() {
             String errorMessage = given()
+                    .header("apikey", apiKey)
                     .when()
                     .delete("http://localhost:8081/api/parkings/" + indexCreateMethod)
                     .then()

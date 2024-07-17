@@ -63,11 +63,12 @@ public class ParkingController {
                                     }
                             )
                     ),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content)
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
             })
     public ResponseEntity<?> getListParking(@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);
         }
         List<ParkingEntity> listParkingEntity = parkingRepository.findAll();
         List<ParkingOutDto> listParkingOutDto = new ArrayList<>();
@@ -82,12 +83,13 @@ public class ParkingController {
     @Operation(summary = "le détail d'un parking par son Id", description = "Retourne le détail d'un parking",
             responses = {
                     @ApiResponse(responseCode = "200", description = " Détail Parking", content = @Content(schema = @Schema(implementation = ParkingOutDto.class))),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Parking non trouvé", content = @Content)
             })
     public ResponseEntity<?> getParkingById(@PathVariable Integer idParking,@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);
         }
         Optional<ParkingEntity> optionalParkingEntity = parkingRepository.findById(idParking);
         if (optionalParkingEntity.isEmpty()) {
@@ -105,13 +107,14 @@ public class ParkingController {
             responses = {
                     @ApiResponse(responseCode = "201", description = " Parking Créer", content = @Content(schema = @Schema(implementation = ParkingInDto.class))),
                     @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }
     )
     public ResponseEntity<?> createType(@Valid @RequestBody ParkingInDto parkingInDto,@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);
         }
         try {
             ParkingEntity parkingEntity = new ParkingEntity(parkingInDto);
@@ -132,14 +135,15 @@ public class ParkingController {
             responses = {
                     @ApiResponse(responseCode = "200", description = " Parking mis à jour", content = @Content(schema = @Schema(implementation = ParkingInDto.class))),
                     @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Parking non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }
     )
     public ResponseEntity<?> updateParking(@PathVariable Integer idParking, @Valid @RequestBody ParkingInDto parkingInDto,@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);
         }
         try {
             Optional<ParkingEntity> optionalParkingEntity = parkingRepository.findById(idParking);
@@ -166,14 +170,15 @@ public class ParkingController {
     @Operation(summary = "Supprime un parking", description = "Supprime un parking",
             responses = {
                     @ApiResponse(responseCode = "200", description = " Parking Supprimé", content = @Content),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Parking non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }
     )
     public ResponseEntity<?> deleteParking(@PathVariable Integer idParking,@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);
         }
         Optional<ParkingEntity> optionalParkingEntity = parkingRepository.findById(idParking);
         if (optionalParkingEntity.isEmpty()) {

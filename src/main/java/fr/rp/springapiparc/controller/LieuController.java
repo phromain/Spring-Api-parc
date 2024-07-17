@@ -68,11 +68,12 @@ public class LieuController {
                                     }
                             )
                     ),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
             })
     public ResponseEntity<?> getListLieux (@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);
         }
         List<LieuEntity> listLieuEntity = lieuRepository.findAll();
         List<LieuOutDto> listLieuOutDto = new ArrayList<>();
@@ -87,12 +88,13 @@ public class LieuController {
     @Operation(summary = "le détail d'une lieu par son Id", description = "Retourne le détail d'un lieu",
             responses = {
                     @ApiResponse(responseCode = "200", description = " Détail Lieu", content = @Content(schema = @Schema(implementation = LieuOutDto.class))),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Lieu non trouvé", content = @Content)
             })
     public ResponseEntity<?> getLieuById(@PathVariable Integer idLieu,@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);
         }
         Optional<LieuEntity> optionalLieuEntity = lieuRepository.findById(idLieu);
         if (optionalLieuEntity.isEmpty()){
@@ -110,14 +112,15 @@ public class LieuController {
             responses = {
                     @ApiResponse(responseCode = "200", description = " Lieu mis à jour",  content = @Content(schema = @Schema(implementation = LieuInDto.class))),
                     @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Lieu non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }
     )
     public ResponseEntity<?> updateLieu (@PathVariable Integer idLieu, @Valid @RequestBody LieuInDto lieuInDto,@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);
         }
         try {
             Optional<LieuEntity> optionalLieuEntity = lieuRepository.findById(idLieu);
@@ -144,14 +147,15 @@ public class LieuController {
     @Operation(summary = "Supprime un lieu", description = "Supprime un lieu",
             responses = {
                     @ApiResponse(responseCode = "200", description = " Lieu Supprimé", content = @Content),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Lieu non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue",content = @Content)
             }
     )
     public ResponseEntity<?> deleteLieu (@PathVariable Integer idLieu,@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);
         }
         Optional<LieuEntity> optionalLieuEntity = lieuRepository.findById(idLieu);
         if (optionalLieuEntity.isEmpty()){

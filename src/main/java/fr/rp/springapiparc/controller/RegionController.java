@@ -73,11 +73,12 @@ public class RegionController {
                                     }
                             )
                     ),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content)
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
             })
     public ResponseEntity<?> getListRegion(@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);
         }
         List<RegionEntity> listRegion = regionRepository.findAll();
         List<RegionOutDto> listRegionDto = new ArrayList<>();
@@ -92,13 +93,14 @@ public class RegionController {
     @Operation(summary = "le détail d'une region par son Id", description = "Retourne le détail d'une region",
             responses = {
                     @ApiResponse(responseCode = "200", description = " Détail Region",content = @Content(schema = @Schema(implementation = RegionOutDto.class))),
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Region non trouvée", content = @Content),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content)
 
             })
     public ResponseEntity<?> getRegionById(@PathVariable Integer idRegion,@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);
         }
         Optional<RegionEntity> optionalRegionEntity = regionRepository.findById(idRegion);
         if (optionalRegionEntity.isEmpty()){
@@ -116,13 +118,14 @@ public class RegionController {
             responses = {
                     @ApiResponse(responseCode = "201", description = " Région Créer", content = @Content(schema = @Schema(implementation = RegionInDto.class))),
                     @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }
     )
     public ResponseEntity<?> createRegion(@Valid @RequestBody RegionInDto regionInDto,@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);
         }
         try {
             RegionEntity regionEntity = new RegionEntity(regionInDto);
@@ -143,14 +146,15 @@ public class RegionController {
             responses = {
                     @ApiResponse(responseCode = "201", description = " Lieu Créer", content = @Content(schema = @Schema(implementation = RegionInDto.class))),
                     @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Region non trouvée", content = @Content),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }
     )
     public ResponseEntity<?> createLieuByIdRegion(@PathVariable Integer idRegion, @Valid @RequestBody LieuInDto lieuInDto,@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);
         }
         Optional<RegionEntity> optionalRegionEntity;
         try {
@@ -181,14 +185,15 @@ public class RegionController {
             responses = {
                     @ApiResponse(responseCode = "200", description = " Région mis à jour",  content = @Content(schema = @Schema(implementation = RegionInDto.class))),
                     @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Région non trouvé", content = @Content),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }
     )
     public ResponseEntity<?> updateRegion (@PathVariable Integer idRegion, @Valid @RequestBody RegionInDto regionInDto,@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);
         }
         try {
             Optional<RegionEntity> optionalRegionEntity = regionRepository.findById(idRegion);
@@ -215,14 +220,15 @@ public class RegionController {
     @Operation(summary = "Supprime une region", description = "Supprime une region",
             responses = {
                     @ApiResponse(responseCode = "200", description = " Région Supprimée", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Région non trouvée", content = @Content),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue",content = @Content)
             }
     )
     public ResponseEntity<?> deleteRegion (@PathVariable Integer idRegion,@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);
         }
         Optional<RegionEntity> optionalRegionEntity = regionRepository.findById(idRegion);
         if (optionalRegionEntity.isEmpty()){

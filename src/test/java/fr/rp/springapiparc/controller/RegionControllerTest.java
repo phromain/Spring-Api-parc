@@ -31,6 +31,8 @@ class RegionControllerTest {
     RegionOutDto testControleRegionOutDto;
     static int indexCreateMethod;
 
+    private static String apiKey = "JKLzcla88cadPbFS1d7jPTMODXQdkW05";
+
     @BeforeEach
     void setUp() {
         listRegionEntity = RegionRepository.findAll();
@@ -47,6 +49,7 @@ class RegionControllerTest {
     @Test
     void getListRegion() {
         List<RegionOutDto> apiResponse = given()
+                .header("apikey", apiKey)
                 .when()
                 .get("http://localhost:8081/api/regions")
                 .then()
@@ -71,6 +74,7 @@ class RegionControllerTest {
     @Test
     void getRegionById200() {
         RegionOutDto apiResponse = given()
+                .header("apikey", apiKey)
                 .when()
                 .get("http://localhost:8081/api/regions/" + 1)
                 .then()
@@ -88,6 +92,7 @@ class RegionControllerTest {
     @Test
     void getRegionById404() {
         String errorMessage = given()
+                .header("apikey", apiKey)
                 .when()
                 .get("http://localhost:8081/api/regions/" + 1000000000)
                 .then()
@@ -106,6 +111,7 @@ class RegionControllerTest {
         RegionInDto RegionInDto = new RegionInDto("Test Create Region");
 
         RegionOutDto apiResponse = given()
+                .header("apikey", apiKey)
                 .contentType(ContentType.JSON)
                 .body(RegionInDto)
                 .when()
@@ -128,6 +134,7 @@ class RegionControllerTest {
         RegionInDto RegionInDto = new RegionInDto("Test Create Region1234@");
 
         ApiError errorResponse = given()
+                .header("apikey", apiKey)
                 .contentType(ContentType.JSON)
                 .body(RegionInDto)
                 .when()
@@ -150,6 +157,7 @@ class RegionControllerTest {
         RegionInDto RegionInDto = new RegionInDto("Test Update Region");
 
         RegionOutDto apiResponse = given()
+                .header("apikey", apiKey)
                 .contentType(ContentType.JSON)
                 .body(RegionInDto)
                 .when()
@@ -171,6 +179,7 @@ class RegionControllerTest {
         RegionInDto RegionInDto = new RegionInDto("Test Update Region@123");
 
         ApiError errorResponse = given()
+                .header("apikey", apiKey)
                 .contentType(ContentType.JSON)
                 .body(RegionInDto)
                 .when()
@@ -190,6 +199,7 @@ class RegionControllerTest {
         RegionInDto RegionInDto = new RegionInDto("Test Update Region");
 
         String errorMessage = given()
+                .header("apikey", apiKey)
                 .contentType(ContentType.JSON)
                 .body(RegionInDto)
                 .when()
@@ -207,6 +217,7 @@ class RegionControllerTest {
     @Transactional
     void deleteRegion404() {
         String errorMessage = given()
+                .header("apikey", apiKey)
                 .when()
                 .delete("http://localhost:8081/api/regions/" + 1000000000)
                 .then()
@@ -223,6 +234,7 @@ class RegionControllerTest {
     @Order(4)
     void deleteRegion200() {
         String errorMessage = given()
+                .header("apikey", apiKey)
                 .when()
                 .delete("http://localhost:8081/api/regions/" + indexCreateMethod)
                 .then()

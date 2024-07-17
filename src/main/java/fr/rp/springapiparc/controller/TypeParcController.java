@@ -61,11 +61,12 @@ public class TypeParcController {
                                     }
                             )
                     ),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content)
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
             })
     public ResponseEntity<?> getListTypeParc(@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);
         }
         List<TypeParcEntity> listTypeParcEntity = typeParcRepository.findAll();
         List<TypeParcOutDto> listTypeParcOutDto = new ArrayList<>();
@@ -80,12 +81,13 @@ public class TypeParcController {
     @Operation(summary = "le type par son Id", description = "Retourne le type",
             responses = {
                     @ApiResponse(responseCode = "200", description = "Type trouvé", content = @Content(schema = @Schema(implementation = TypeParcOutDto.class))),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Type non trouvé", content = @Content)
             })
     public ResponseEntity<?> getTypeParcById(@PathVariable Integer idType,@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);
         }
         Optional<TypeParcEntity> optionalTypeParcEntity = typeParcRepository.findById(idType);
         if (optionalTypeParcEntity.isEmpty()){
@@ -104,13 +106,14 @@ public class TypeParcController {
             responses = {
                     @ApiResponse(responseCode = "201", description = "Type Créer", content = @Content(schema = @Schema(implementation = TypeParcInDto.class))),
                     @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }
     )
     public ResponseEntity<?> createType(@Valid  @RequestBody TypeParcInDto typeParcInDto,@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);
         }
         try {
             TypeParcEntity typeParcEntity = new TypeParcEntity(typeParcInDto);
@@ -130,15 +133,15 @@ public class TypeParcController {
             responses = {
                     @ApiResponse(responseCode = "200", description = " Type mis à jour",  content = @Content(schema = @Schema(implementation = TypeParcInDto.class))),
                     @ApiResponse(responseCode = "400", description = "Erreur Validator", content = @Content),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Type non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue", content = @Content)
             }
     )
     public ResponseEntity<?> updateTypeParc (@PathVariable Integer idType, @Valid @RequestBody TypeParcInDto typeParcInDto,@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
-        }
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);        }
         try {
             Optional<TypeParcEntity> optionalTypeParcEntity = typeParcRepository.findById(idType);
             if (optionalTypeParcEntity.isEmpty()){
@@ -164,14 +167,15 @@ public class TypeParcController {
     @Operation(summary = "Supprime un type", description = "Supprime un type",
             responses = {
                     @ApiResponse(responseCode = "200", description = " Type Supprimé", content = @Content),
-                    @ApiResponse(responseCode = "401", description = "apikey non valide", content = @Content),
+                    @ApiResponse(responseCode = "401", description = "Parametre Authentification manquant", content = @Content),
+                    @ApiResponse(responseCode = "403", description = "apikey non valide", content = @Content),
                     @ApiResponse(responseCode = "404", description = "Type non trouvé", content = @Content),
                     @ApiResponse(responseCode = "500", description = "Une erreur interne est survenue",content = @Content)
             }
     )
     public ResponseEntity<?> deleteType (@PathVariable Integer idType,@RequestHeader(value = "apikey", required = true) String apikey)  {
         if (!apikeyService.validateApiKey(apikey)) {
-            return new ResponseEntity<>("apikey non valide", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("apikey non valide", HttpStatus.FORBIDDEN);
         }
         Optional<TypeParcEntity> optionalTypeParcEntity = typeParcRepository.findById(idType);
         if (optionalTypeParcEntity.isEmpty()){

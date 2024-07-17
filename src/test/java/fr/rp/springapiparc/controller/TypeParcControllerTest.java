@@ -33,6 +33,7 @@ class TypeParcControllerTest {
     Random rand = new Random();
     TypeParcOutDto testControleTypeParcOutDto;
     static int indexCreateMethod;
+    private static String apiKey = "JKLzcla88cadPbFS1d7jPTMODXQdkW05";
 
     @BeforeEach
     void setUp() {
@@ -50,6 +51,7 @@ class TypeParcControllerTest {
     @Test
     void getListTypeParc() {
         List<TypeParcOutDto> apiResponse = given()
+                .header("apikey", apiKey)
                 .when()
                 .get("http://localhost:8081/api/types")
                 .then()
@@ -72,6 +74,7 @@ class TypeParcControllerTest {
     @Test
     void getTypeParcById200() {
         TypeParcOutDto apiResponse = given()
+                .header("apikey", apiKey)
                 .when()
                 .get("http://localhost:8081/api/types/" + 1)
                 .then()
@@ -85,9 +88,41 @@ class TypeParcControllerTest {
         assertEquals(testControleTypeParcOutDto.getLibelleTypeParc(), apiResponse.getLibelleTypeParc());
         assertEquals(testControleTypeParcOutDto.getSlugType(), apiResponse.getSlugType());
     }
+
+    @Test
+    void getTypeParcById401() {
+        String errorMessage = given()
+                .when()
+                .get("http://localhost:8081/api/types/" + 1)
+                .then()
+                .statusCode(401)
+                .extract()
+                .body()
+                .asString();
+
+        assertEquals("Parametre Authentification manquant", errorMessage);
+
+    }
+    @Test
+    void getTypeParcById403() {
+        String errorMessage = given()
+                .header("apikey", "apiKey non valide")
+                .when()
+                .get("http://localhost:8081/api/types/" + 1)
+                .then()
+                .statusCode(403)
+                .extract()
+                .body()
+                .asString();
+
+        assertEquals("apikey non valide", errorMessage);
+
+    }
+
     @Test
     void getTypeParcById404() {
         String errorMessage = given()
+                .header("apikey", apiKey)
                 .when()
                 .get("http://localhost:8081/api/types/" + 1000000000)
                 .then()
@@ -106,6 +141,7 @@ class TypeParcControllerTest {
         TypeParcInDto typeParcInDto = new TypeParcInDto("Test Create TypeParc");
 
         TypeParcOutDto apiResponse = given()
+                .header("apikey", apiKey)
                 .contentType(ContentType.JSON)
                 .body(typeParcInDto)
                 .when()
@@ -128,6 +164,7 @@ class TypeParcControllerTest {
         TypeParcInDto typeParcInDto = new TypeParcInDto("Test Create TypeParc1234@");
 
         ApiError errorResponse = given()
+                .header("apikey", apiKey)
                 .contentType(ContentType.JSON)
                 .body(typeParcInDto)
                 .when()
@@ -150,6 +187,7 @@ class TypeParcControllerTest {
         TypeParcInDto typeParcInDto = new TypeParcInDto("Test Update TypeParc");
 
         TypeParcOutDto apiResponse = given()
+                .header("apikey", apiKey)
                 .contentType(ContentType.JSON)
                 .body(typeParcInDto)
                 .when()
@@ -171,6 +209,7 @@ class TypeParcControllerTest {
         TypeParcInDto typeParcInDto = new TypeParcInDto("Test Update TypeParc@123");
 
         ApiError errorResponse = given()
+                .header("apikey", apiKey)
                 .contentType(ContentType.JSON)
                 .body(typeParcInDto)
                 .when()
@@ -190,6 +229,7 @@ class TypeParcControllerTest {
         TypeParcInDto typeParcInDto = new TypeParcInDto("Test Update TypeParc");
 
         String errorMessage = given()
+                .header("apikey", apiKey)
                 .contentType(ContentType.JSON)
                 .body(typeParcInDto)
                 .when()
@@ -207,6 +247,7 @@ class TypeParcControllerTest {
     @Transactional
     void deleteType404() {
         String errorMessage = given()
+                .header("apikey", apiKey)
                 .when()
                 .delete("http://localhost:8081/api/types/" + 1000000000)
                 .then()
@@ -223,6 +264,7 @@ class TypeParcControllerTest {
     @Order(4)
     void deleteType200() {
         String errorMessage = given()
+                .header("apikey", apiKey)
                 .when()
                 .delete("http://localhost:8081/api/types/" + indexCreateMethod)
                 .then()

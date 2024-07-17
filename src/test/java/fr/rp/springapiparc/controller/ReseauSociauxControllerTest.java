@@ -31,6 +31,7 @@ class ReseauSociauxControllerTest {
         Random rand = new Random();
         ReseauSociauxOutDto testControleReseauSociauxOutDto;
         static int indexCreateMethod;
+        private static String apiKey = "JKLzcla88cadPbFS1d7jPTMODXQdkW05";
 
         @BeforeEach
         void setUp() {
@@ -48,6 +49,7 @@ class ReseauSociauxControllerTest {
         @Test
         void getListReseauSociaux() {
             List<ReseauSociauxOutDto> apiResponse = given()
+                    .header("apikey", apiKey)
                     .when()
                     .get("http://localhost:8081/api/reseausociaux")
                     .then()
@@ -70,6 +72,7 @@ class ReseauSociauxControllerTest {
         @Test
         void getReseauSociauxById200() {
             ReseauSociauxOutDto apiResponse = given()
+                    .header("apikey", apiKey)
                     .when()
                     .get("http://localhost:8081/api/reseausociaux/" + 1)
                     .then()
@@ -86,6 +89,7 @@ class ReseauSociauxControllerTest {
         @Test
         void getReseauSociauxById404() {
             String errorMessage = given()
+                    .header("apikey", apiKey)
                     .when()
                     .get("http://localhost:8081/api/reseausociaux/" + 1000000000)
                     .then()
@@ -104,6 +108,7 @@ class ReseauSociauxControllerTest {
             ReseauSociauxInDto parkingInDto = new ReseauSociauxInDto("Test Create ReseauSociaux");
 
             ReseauSociauxOutDto apiResponse = given()
+                    .header("apikey", apiKey)
                     .contentType(ContentType.JSON)
                     .body(parkingInDto)
                     .when()
@@ -126,6 +131,7 @@ class ReseauSociauxControllerTest {
             ReseauSociauxInDto parkingInDto = new ReseauSociauxInDto("Test Create ReseauSociaux1234@");
 
             ApiError errorResponse = given()
+                    .header("apikey", apiKey)
                     .contentType(ContentType.JSON)
                     .body(parkingInDto)
                     .when()
@@ -148,6 +154,7 @@ class ReseauSociauxControllerTest {
             ReseauSociauxInDto parkingInDto = new ReseauSociauxInDto("Test Update ReseauSociaux");
 
             ReseauSociauxOutDto apiResponse = given()
+                    .header("apikey", apiKey)
                     .contentType(ContentType.JSON)
                     .body(parkingInDto)
                     .when()
@@ -169,6 +176,7 @@ class ReseauSociauxControllerTest {
             ReseauSociauxInDto parkingInDto = new ReseauSociauxInDto("Test Update ReseauSociaux@123");
 
             ApiError errorResponse = given()
+                    .header("apikey", apiKey)
                     .contentType(ContentType.JSON)
                     .body(parkingInDto)
                     .when()
@@ -188,6 +196,7 @@ class ReseauSociauxControllerTest {
             ReseauSociauxInDto parkingInDto = new ReseauSociauxInDto("Test Update ReseauSociaux");
 
             String errorMessage = given()
+                    .header("apikey", apiKey)
                     .contentType(ContentType.JSON)
                     .body(parkingInDto)
                     .when()
@@ -205,6 +214,7 @@ class ReseauSociauxControllerTest {
         @Transactional
         void deleteReseauSociaux404() {
             String errorMessage = given()
+                    .header("apikey", apiKey)
                     .when()
                     .delete("http://localhost:8081/api/reseausociaux/" + 1000000000)
                     .then()
@@ -221,6 +231,7 @@ class ReseauSociauxControllerTest {
         @Order(4)
         void deleteReseauSociaux200() {
             String errorMessage = given()
+                    .header("apikey", apiKey)
                     .when()
                     .delete("http://localhost:8081/api/reseausociaux/" + indexCreateMethod)
                     .then()

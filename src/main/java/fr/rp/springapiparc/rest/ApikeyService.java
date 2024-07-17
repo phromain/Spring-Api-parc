@@ -24,10 +24,9 @@ public class ApikeyService {
             HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
             ResponseEntity<String> response = restTemplate.exchange("http://localhost:8083/apikey/key", HttpMethod.GET, entity, String.class);
             return response.getStatusCode() == HttpStatus.OK;
-        } catch (HttpClientErrorException.NotFound e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "apikey non valide");
+        } catch (Exception e) {
+            return false;
         }
     }
-
 
 }
